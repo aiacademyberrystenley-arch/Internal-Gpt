@@ -1,0 +1,11 @@
+College Name: ABC Institute of Technology
+Department: Computer Science and Engineering
+HOD: Dr. Rajesh Kumar
+Operating Systems Faculty: Mrs. Shiwanki Sharma
+DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204
+Minimum Attendance Requirement: 75 percent
+Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM
+Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM
+Fee Last Date: 30 May 2026
+Hostel Warden: Mr. Amit Verma
+Placement Cell Coordinator: Ms. Neha Singh

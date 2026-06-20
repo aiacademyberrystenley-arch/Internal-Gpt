@@ -1,0 +1,530 @@
+ABC Institute of Technology - Internal GPT Knowledge Base
+Generated sample document for RAG testing and college chatbot demonstrations.
+College Name: ABC Institute of Technology
+Academic Year: 2025-2026
+Campus Address: Knowledge Park Road, Sector 12, Jaipur, Rajasthan
+Main Office Timing: Monday to Saturday, 9:00 AM to 5:00 PM
+Emergency Contact: +91-90000-11111
+Official Email: helpdesk@abcit.edu
+009. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+010. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+011. Admissions: Original marksheets must be carried for verification.
+012. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+013. Admissions: Late admission fee payment requires approval from the Registrar.
+014. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+015. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+016. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+017. Examinations: Students must carry college ID card and admit card for every exam.
+018. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+019. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+020. Attendance: Students below 75 percent attendance must meet the department mentor.
+021. Attendance: Medical leave is counted only after submitting approved medical documents.
+022. Attendance: Attendance shortage notices are published every month.
+023. Attendance: Parents may be informed if attendance falls below 65 percent.
+024. Computer Science Department: Department: Computer Science and Engineering.
+025. Computer Science Department: HOD: Dr. Rajesh Kumar.
+026. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+027. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+028. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+029. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+030. Library: Students can issue up to 4 books at a time.
+031. Library: Book issue duration is 14 days for students.
+032. Library: Late return fine is 5 rupees per book per day.
+033. Library: Digital library access is available through the campus portal.
+034. Labs: Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM.
+035. Labs: AI Lab is located in Block C, Room 305.
+036. Labs: Lab coats are compulsory for Electronics and Mechanical workshops.
+037. Labs: Internet access in labs is for academic use only.
+038. Labs: Students must save project files on approved storage locations.
+039. Fees: Fee Last Date: 30 May 2026.
+040. Fees: Late fee fine is 100 rupees per day after the due date.
+041. Fees: Fee payment receipt must be downloaded from the ERP portal.
+042. Fees: Scholarship students must submit renewal documents before 20 June 2026.
+043. Fees: Accounts office is located in Admin Block Room 103.
+044. Hostel: Hostel Warden: Mr. Amit Verma.
+045. Hostel: Hostel entry deadline is 9:30 PM for students.
+046. Hostel: Visitors are allowed only in the hostel reception area.
+047. Hostel: Mess breakfast timing is 7:30 AM to 9:00 AM.
+048. Hostel: Hostel complaint register is available at the warden office.
+049. Transport: College bus pass renewal starts on 1 June 2026.
+050. Transport: Transport office is located near Gate 2.
+051. Transport: Route 4 bus leaves Mansarovar at 7:35 AM.
+052. Transport: Route 7 bus leaves Vaishali Nagar at 7:25 AM.
+053. Transport: Lost bus pass replacement fee is 200 rupees.
+054. Placements: Placement Cell Coordinator: Ms. Neha Singh.
+055. Placements: Placement training begins on 10 June 2026 for final year students.
+056. Placements: Resume review sessions are held every Friday.
+057. Placements: Minimum CGPA for most placement drives is 6.5 unless company rules differ.
+058. Placements: Students must register on the placement portal before attending drives.
+059. Faculty Rules: Teachers must upload internal marks before the announced deadline.
+060. Faculty Rules: Faculty attendance must be recorded through biometric system.
+061. Faculty Rules: Class adjustment requests must be approved by the HOD.
+062. Faculty Rules: Lab allocation changes require written approval.
+063. Faculty Rules: Exam duty roster is published by the exam cell.
+064. Student Conduct: College ID card is mandatory on campus.
+065. Student Conduct: Ragging is strictly prohibited and punishable under college rules.
+066. Student Conduct: Mobile phones must be silent inside classrooms and labs.
+067. Student Conduct: Students must follow classroom discipline and faculty instructions.
+068. Student Conduct: Damage to college property may result in disciplinary action.
+069. Scholarships: Merit scholarship applications open on 5 July 2026.
+070. Scholarships: Need-based scholarship forms are available from the accounts office.
+071. Scholarships: Scholarship renewal requires latest marksheet and attendance record.
+072. Scholarships: Incomplete scholarship applications will not be processed.
+073. Scholarships: Scholarship committee meets on the first Monday of every month.
+074. Events: Annual tech fest TechNova is scheduled for 12 September 2026.
+075. Events: Cultural fest Aarambh is scheduled for 20 October 2026.
+076. Events: Sports week begins on 5 November 2026.
+077. Events: Department project expo is scheduled for 28 August 2026.
+078. Events: Event participation certificates are issued by the student activity cell.
+079. ERP Portal: ERP login uses student registration number as username.
+080. ERP Portal: Password reset requests are handled by the IT helpdesk.
+081. ERP Portal: Students can download fee receipts from the ERP portal.
+082. ERP Portal: Attendance reports are visible in the ERP portal.
+083. ERP Portal: Exam admit cards are published through the ERP portal.
+084. Canteen: Canteen timing is 8:30 AM to 5:30 PM.
+085. Canteen: Lunch combo is available from 12:30 PM to 2:30 PM.
+086. Canteen: Students must maintain cleanliness in the canteen area.
+087. Canteen: Outside vendors are not allowed inside academic blocks.
+088. Canteen: Canteen feedback can be submitted to student welfare office.
+089. Medical: Medical room is located in Block A near reception.
+090. Medical: First aid is available during college hours.
+091. Medical: Emergency ambulance support can be requested through the main office.
+092. Medical: Medical leave applications require supporting documents.
+093. Medical: Annual health camp is scheduled for 17 August 2026.
+094. Research: Project proposal submission deadline is 15 August 2026.
+095. Research: Research lab access requires faculty supervisor approval.
+096. Research: Students publishing papers must mention college affiliation correctly.
+097. Research: Innovation cell meets every Wednesday at 3:30 PM.
+098. Research: Patent support requests are handled by the R&D cell.
+099. Security: Main gate entry requires ID verification.
+100. Security: Vehicle parking sticker is mandatory for students and staff.
+101. Security: CCTV monitoring is active in common campus areas.
+102. Security: Lost and found items are collected at the security office.
+103. Security: After-hours lab access requires written permission.
+104. Academic Calendar: Odd semester classes begin on 18 July 2026.
+105. Academic Calendar: Mid-semester exams begin on 12 September 2026.
+106. Academic Calendar: Internal assessment submission ends on 30 September 2026.
+107. Academic Calendar: End-semester practical exams begin on 10 November 2026.
+108. Academic Calendar: Winter vacation begins on 24 December 2026.
+109. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+110. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+111. Admissions: Original marksheets must be carried for verification.
+112. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+113. Admissions: Late admission fee payment requires approval from the Registrar.
+114. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+115. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+116. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+117. Examinations: Students must carry college ID card and admit card for every exam.
+118. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+119. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+120. Attendance: Students below 75 percent attendance must meet the department mentor.
+121. Attendance: Medical leave is counted only after submitting approved medical documents.
+122. Attendance: Attendance shortage notices are published every month.
+123. Attendance: Parents may be informed if attendance falls below 65 percent.
+124. Computer Science Department: Department: Computer Science and Engineering.
+125. Computer Science Department: HOD: Dr. Rajesh Kumar.
+126. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+127. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+128. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+129. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+130. Library: Students can issue up to 4 books at a time.
+131. Library: Book issue duration is 14 days for students.
+132. Library: Late return fine is 5 rupees per book per day.
+133. Library: Digital library access is available through the campus portal.
+134. Labs: Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM.
+135. Labs: AI Lab is located in Block C, Room 305.
+136. Labs: Lab coats are compulsory for Electronics and Mechanical workshops.
+137. Labs: Internet access in labs is for academic use only.
+138. Labs: Students must save project files on approved storage locations.
+139. Fees: Fee Last Date: 30 May 2026.
+140. Fees: Late fee fine is 100 rupees per day after the due date.
+141. Fees: Fee payment receipt must be downloaded from the ERP portal.
+142. Fees: Scholarship students must submit renewal documents before 20 June 2026.
+143. Fees: Accounts office is located in Admin Block Room 103.
+144. Hostel: Hostel Warden: Mr. Amit Verma.
+145. Hostel: Hostel entry deadline is 9:30 PM for students.
+146. Hostel: Visitors are allowed only in the hostel reception area.
+147. Hostel: Mess breakfast timing is 7:30 AM to 9:00 AM.
+148. Hostel: Hostel complaint register is available at the warden office.
+149. Transport: College bus pass renewal starts on 1 June 2026.
+150. Transport: Transport office is located near Gate 2.
+151. Transport: Route 4 bus leaves Mansarovar at 7:35 AM.
+152. Transport: Route 7 bus leaves Vaishali Nagar at 7:25 AM.
+153. Transport: Lost bus pass replacement fee is 200 rupees.
+154. Placements: Placement Cell Coordinator: Ms. Neha Singh.
+155. Placements: Placement training begins on 10 June 2026 for final year students.
+156. Placements: Resume review sessions are held every Friday.
+157. Placements: Minimum CGPA for most placement drives is 6.5 unless company rules differ.
+158. Placements: Students must register on the placement portal before attending drives.
+159. Faculty Rules: Teachers must upload internal marks before the announced deadline.
+160. Faculty Rules: Faculty attendance must be recorded through biometric system.
+161. Faculty Rules: Class adjustment requests must be approved by the HOD.
+162. Faculty Rules: Lab allocation changes require written approval.
+163. Faculty Rules: Exam duty roster is published by the exam cell.
+164. Student Conduct: College ID card is mandatory on campus.
+165. Student Conduct: Ragging is strictly prohibited and punishable under college rules.
+166. Student Conduct: Mobile phones must be silent inside classrooms and labs.
+167. Student Conduct: Students must follow classroom discipline and faculty instructions.
+168. Student Conduct: Damage to college property may result in disciplinary action.
+169. Scholarships: Merit scholarship applications open on 5 July 2026.
+170. Scholarships: Need-based scholarship forms are available from the accounts office.
+171. Scholarships: Scholarship renewal requires latest marksheet and attendance record.
+172. Scholarships: Incomplete scholarship applications will not be processed.
+173. Scholarships: Scholarship committee meets on the first Monday of every month.
+174. Events: Annual tech fest TechNova is scheduled for 12 September 2026.
+175. Events: Cultural fest Aarambh is scheduled for 20 October 2026.
+176. Events: Sports week begins on 5 November 2026.
+177. Events: Department project expo is scheduled for 28 August 2026.
+178. Events: Event participation certificates are issued by the student activity cell.
+179. ERP Portal: ERP login uses student registration number as username.
+180. ERP Portal: Password reset requests are handled by the IT helpdesk.
+181. ERP Portal: Students can download fee receipts from the ERP portal.
+182. ERP Portal: Attendance reports are visible in the ERP portal.
+183. ERP Portal: Exam admit cards are published through the ERP portal.
+184. Canteen: Canteen timing is 8:30 AM to 5:30 PM.
+185. Canteen: Lunch combo is available from 12:30 PM to 2:30 PM.
+186. Canteen: Students must maintain cleanliness in the canteen area.
+187. Canteen: Outside vendors are not allowed inside academic blocks.
+188. Canteen: Canteen feedback can be submitted to student welfare office.
+189. Medical: Medical room is located in Block A near reception.
+190. Medical: First aid is available during college hours.
+191. Medical: Emergency ambulance support can be requested through the main office.
+192. Medical: Medical leave applications require supporting documents.
+193. Medical: Annual health camp is scheduled for 17 August 2026.
+194. Research: Project proposal submission deadline is 15 August 2026.
+195. Research: Research lab access requires faculty supervisor approval.
+196. Research: Students publishing papers must mention college affiliation correctly.
+197. Research: Innovation cell meets every Wednesday at 3:30 PM.
+198. Research: Patent support requests are handled by the R&D cell.
+199. Security: Main gate entry requires ID verification.
+200. Security: Vehicle parking sticker is mandatory for students and staff.
+201. Security: CCTV monitoring is active in common campus areas.
+202. Security: Lost and found items are collected at the security office.
+203. Security: After-hours lab access requires written permission.
+204. Academic Calendar: Odd semester classes begin on 18 July 2026.
+205. Academic Calendar: Mid-semester exams begin on 12 September 2026.
+206. Academic Calendar: Internal assessment submission ends on 30 September 2026.
+207. Academic Calendar: End-semester practical exams begin on 10 November 2026.
+208. Academic Calendar: Winter vacation begins on 24 December 2026.
+209. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+210. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+211. Admissions: Original marksheets must be carried for verification.
+212. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+213. Admissions: Late admission fee payment requires approval from the Registrar.
+214. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+215. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+216. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+217. Examinations: Students must carry college ID card and admit card for every exam.
+218. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+219. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+220. Attendance: Students below 75 percent attendance must meet the department mentor.
+221. Attendance: Medical leave is counted only after submitting approved medical documents.
+222. Attendance: Attendance shortage notices are published every month.
+223. Attendance: Parents may be informed if attendance falls below 65 percent.
+224. Computer Science Department: Department: Computer Science and Engineering.
+225. Computer Science Department: HOD: Dr. Rajesh Kumar.
+226. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+227. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+228. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+229. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+230. Library: Students can issue up to 4 books at a time.
+231. Library: Book issue duration is 14 days for students.
+232. Library: Late return fine is 5 rupees per book per day.
+233. Library: Digital library access is available through the campus portal.
+234. Labs: Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM.
+235. Labs: AI Lab is located in Block C, Room 305.
+236. Labs: Lab coats are compulsory for Electronics and Mechanical workshops.
+237. Labs: Internet access in labs is for academic use only.
+238. Labs: Students must save project files on approved storage locations.
+239. Fees: Fee Last Date: 30 May 2026.
+240. Fees: Late fee fine is 100 rupees per day after the due date.
+241. Fees: Fee payment receipt must be downloaded from the ERP portal.
+242. Fees: Scholarship students must submit renewal documents before 20 June 2026.
+243. Fees: Accounts office is located in Admin Block Room 103.
+244. Hostel: Hostel Warden: Mr. Amit Verma.
+245. Hostel: Hostel entry deadline is 9:30 PM for students.
+246. Hostel: Visitors are allowed only in the hostel reception area.
+247. Hostel: Mess breakfast timing is 7:30 AM to 9:00 AM.
+248. Hostel: Hostel complaint register is available at the warden office.
+249. Transport: College bus pass renewal starts on 1 June 2026.
+250. Transport: Transport office is located near Gate 2.
+251. Transport: Route 4 bus leaves Mansarovar at 7:35 AM.
+252. Transport: Route 7 bus leaves Vaishali Nagar at 7:25 AM.
+253. Transport: Lost bus pass replacement fee is 200 rupees.
+254. Placements: Placement Cell Coordinator: Ms. Neha Singh.
+255. Placements: Placement training begins on 10 June 2026 for final year students.
+256. Placements: Resume review sessions are held every Friday.
+257. Placements: Minimum CGPA for most placement drives is 6.5 unless company rules differ.
+258. Placements: Students must register on the placement portal before attending drives.
+259. Faculty Rules: Teachers must upload internal marks before the announced deadline.
+260. Faculty Rules: Faculty attendance must be recorded through biometric system.
+261. Faculty Rules: Class adjustment requests must be approved by the HOD.
+262. Faculty Rules: Lab allocation changes require written approval.
+263. Faculty Rules: Exam duty roster is published by the exam cell.
+264. Student Conduct: College ID card is mandatory on campus.
+265. Student Conduct: Ragging is strictly prohibited and punishable under college rules.
+266. Student Conduct: Mobile phones must be silent inside classrooms and labs.
+267. Student Conduct: Students must follow classroom discipline and faculty instructions.
+268. Student Conduct: Damage to college property may result in disciplinary action.
+269. Scholarships: Merit scholarship applications open on 5 July 2026.
+270. Scholarships: Need-based scholarship forms are available from the accounts office.
+271. Scholarships: Scholarship renewal requires latest marksheet and attendance record.
+272. Scholarships: Incomplete scholarship applications will not be processed.
+273. Scholarships: Scholarship committee meets on the first Monday of every month.
+274. Events: Annual tech fest TechNova is scheduled for 12 September 2026.
+275. Events: Cultural fest Aarambh is scheduled for 20 October 2026.
+276. Events: Sports week begins on 5 November 2026.
+277. Events: Department project expo is scheduled for 28 August 2026.
+278. Events: Event participation certificates are issued by the student activity cell.
+279. ERP Portal: ERP login uses student registration number as username.
+280. ERP Portal: Password reset requests are handled by the IT helpdesk.
+281. ERP Portal: Students can download fee receipts from the ERP portal.
+282. ERP Portal: Attendance reports are visible in the ERP portal.
+283. ERP Portal: Exam admit cards are published through the ERP portal.
+284. Canteen: Canteen timing is 8:30 AM to 5:30 PM.
+285. Canteen: Lunch combo is available from 12:30 PM to 2:30 PM.
+286. Canteen: Students must maintain cleanliness in the canteen area.
+287. Canteen: Outside vendors are not allowed inside academic blocks.
+288. Canteen: Canteen feedback can be submitted to student welfare office.
+289. Medical: Medical room is located in Block A near reception.
+290. Medical: First aid is available during college hours.
+291. Medical: Emergency ambulance support can be requested through the main office.
+292. Medical: Medical leave applications require supporting documents.
+293. Medical: Annual health camp is scheduled for 17 August 2026.
+294. Research: Project proposal submission deadline is 15 August 2026.
+295. Research: Research lab access requires faculty supervisor approval.
+296. Research: Students publishing papers must mention college affiliation correctly.
+297. Research: Innovation cell meets every Wednesday at 3:30 PM.
+298. Research: Patent support requests are handled by the R&D cell.
+299. Security: Main gate entry requires ID verification.
+300. Security: Vehicle parking sticker is mandatory for students and staff.
+301. Security: CCTV monitoring is active in common campus areas.
+302. Security: Lost and found items are collected at the security office.
+303. Security: After-hours lab access requires written permission.
+304. Academic Calendar: Odd semester classes begin on 18 July 2026.
+305. Academic Calendar: Mid-semester exams begin on 12 September 2026.
+306. Academic Calendar: Internal assessment submission ends on 30 September 2026.
+307. Academic Calendar: End-semester practical exams begin on 10 November 2026.
+308. Academic Calendar: Winter vacation begins on 24 December 2026.
+309. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+310. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+311. Admissions: Original marksheets must be carried for verification.
+312. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+313. Admissions: Late admission fee payment requires approval from the Registrar.
+314. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+315. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+316. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+317. Examinations: Students must carry college ID card and admit card for every exam.
+318. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+319. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+320. Attendance: Students below 75 percent attendance must meet the department mentor.
+321. Attendance: Medical leave is counted only after submitting approved medical documents.
+322. Attendance: Attendance shortage notices are published every month.
+323. Attendance: Parents may be informed if attendance falls below 65 percent.
+324. Computer Science Department: Department: Computer Science and Engineering.
+325. Computer Science Department: HOD: Dr. Rajesh Kumar.
+326. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+327. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+328. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+329. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+330. Library: Students can issue up to 4 books at a time.
+331. Library: Book issue duration is 14 days for students.
+332. Library: Late return fine is 5 rupees per book per day.
+333. Library: Digital library access is available through the campus portal.
+334. Labs: Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM.
+335. Labs: AI Lab is located in Block C, Room 305.
+336. Labs: Lab coats are compulsory for Electronics and Mechanical workshops.
+337. Labs: Internet access in labs is for academic use only.
+338. Labs: Students must save project files on approved storage locations.
+339. Fees: Fee Last Date: 30 May 2026.
+340. Fees: Late fee fine is 100 rupees per day after the due date.
+341. Fees: Fee payment receipt must be downloaded from the ERP portal.
+342. Fees: Scholarship students must submit renewal documents before 20 June 2026.
+343. Fees: Accounts office is located in Admin Block Room 103.
+344. Hostel: Hostel Warden: Mr. Amit Verma.
+345. Hostel: Hostel entry deadline is 9:30 PM for students.
+346. Hostel: Visitors are allowed only in the hostel reception area.
+347. Hostel: Mess breakfast timing is 7:30 AM to 9:00 AM.
+348. Hostel: Hostel complaint register is available at the warden office.
+349. Transport: College bus pass renewal starts on 1 June 2026.
+350. Transport: Transport office is located near Gate 2.
+351. Transport: Route 4 bus leaves Mansarovar at 7:35 AM.
+352. Transport: Route 7 bus leaves Vaishali Nagar at 7:25 AM.
+353. Transport: Lost bus pass replacement fee is 200 rupees.
+354. Placements: Placement Cell Coordinator: Ms. Neha Singh.
+355. Placements: Placement training begins on 10 June 2026 for final year students.
+356. Placements: Resume review sessions are held every Friday.
+357. Placements: Minimum CGPA for most placement drives is 6.5 unless company rules differ.
+358. Placements: Students must register on the placement portal before attending drives.
+359. Faculty Rules: Teachers must upload internal marks before the announced deadline.
+360. Faculty Rules: Faculty attendance must be recorded through biometric system.
+361. Faculty Rules: Class adjustment requests must be approved by the HOD.
+362. Faculty Rules: Lab allocation changes require written approval.
+363. Faculty Rules: Exam duty roster is published by the exam cell.
+364. Student Conduct: College ID card is mandatory on campus.
+365. Student Conduct: Ragging is strictly prohibited and punishable under college rules.
+366. Student Conduct: Mobile phones must be silent inside classrooms and labs.
+367. Student Conduct: Students must follow classroom discipline and faculty instructions.
+368. Student Conduct: Damage to college property may result in disciplinary action.
+369. Scholarships: Merit scholarship applications open on 5 July 2026.
+370. Scholarships: Need-based scholarship forms are available from the accounts office.
+371. Scholarships: Scholarship renewal requires latest marksheet and attendance record.
+372. Scholarships: Incomplete scholarship applications will not be processed.
+373. Scholarships: Scholarship committee meets on the first Monday of every month.
+374. Events: Annual tech fest TechNova is scheduled for 12 September 2026.
+375. Events: Cultural fest Aarambh is scheduled for 20 October 2026.
+376. Events: Sports week begins on 5 November 2026.
+377. Events: Department project expo is scheduled for 28 August 2026.
+378. Events: Event participation certificates are issued by the student activity cell.
+379. ERP Portal: ERP login uses student registration number as username.
+380. ERP Portal: Password reset requests are handled by the IT helpdesk.
+381. ERP Portal: Students can download fee receipts from the ERP portal.
+382. ERP Portal: Attendance reports are visible in the ERP portal.
+383. ERP Portal: Exam admit cards are published through the ERP portal.
+384. Canteen: Canteen timing is 8:30 AM to 5:30 PM.
+385. Canteen: Lunch combo is available from 12:30 PM to 2:30 PM.
+386. Canteen: Students must maintain cleanliness in the canteen area.
+387. Canteen: Outside vendors are not allowed inside academic blocks.
+388. Canteen: Canteen feedback can be submitted to student welfare office.
+389. Medical: Medical room is located in Block A near reception.
+390. Medical: First aid is available during college hours.
+391. Medical: Emergency ambulance support can be requested through the main office.
+392. Medical: Medical leave applications require supporting documents.
+393. Medical: Annual health camp is scheduled for 17 August 2026.
+394. Research: Project proposal submission deadline is 15 August 2026.
+395. Research: Research lab access requires faculty supervisor approval.
+396. Research: Students publishing papers must mention college affiliation correctly.
+397. Research: Innovation cell meets every Wednesday at 3:30 PM.
+398. Research: Patent support requests are handled by the R&D cell.
+399. Security: Main gate entry requires ID verification.
+400. Security: Vehicle parking sticker is mandatory for students and staff.
+401. Security: CCTV monitoring is active in common campus areas.
+402. Security: Lost and found items are collected at the security office.
+403. Security: After-hours lab access requires written permission.
+404. Academic Calendar: Odd semester classes begin on 18 July 2026.
+405. Academic Calendar: Mid-semester exams begin on 12 September 2026.
+406. Academic Calendar: Internal assessment submission ends on 30 September 2026.
+407. Academic Calendar: End-semester practical exams begin on 10 November 2026.
+408. Academic Calendar: Winter vacation begins on 24 December 2026.
+409. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+410. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+411. Admissions: Original marksheets must be carried for verification.
+412. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+413. Admissions: Late admission fee payment requires approval from the Registrar.
+414. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+415. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+416. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+417. Examinations: Students must carry college ID card and admit card for every exam.
+418. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+419. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+420. Attendance: Students below 75 percent attendance must meet the department mentor.
+421. Attendance: Medical leave is counted only after submitting approved medical documents.
+422. Attendance: Attendance shortage notices are published every month.
+423. Attendance: Parents may be informed if attendance falls below 65 percent.
+424. Computer Science Department: Department: Computer Science and Engineering.
+425. Computer Science Department: HOD: Dr. Rajesh Kumar.
+426. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+427. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+428. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+429. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+430. Library: Students can issue up to 4 books at a time.
+431. Library: Book issue duration is 14 days for students.
+432. Library: Late return fine is 5 rupees per book per day.
+433. Library: Digital library access is available through the campus portal.
+434. Labs: Computer Lab 3 Timing: Monday to Friday, 10:00 AM to 5:00 PM.
+435. Labs: AI Lab is located in Block C, Room 305.
+436. Labs: Lab coats are compulsory for Electronics and Mechanical workshops.
+437. Labs: Internet access in labs is for academic use only.
+438. Labs: Students must save project files on approved storage locations.
+439. Fees: Fee Last Date: 30 May 2026.
+440. Fees: Late fee fine is 100 rupees per day after the due date.
+441. Fees: Fee payment receipt must be downloaded from the ERP portal.
+442. Fees: Scholarship students must submit renewal documents before 20 June 2026.
+443. Fees: Accounts office is located in Admin Block Room 103.
+444. Hostel: Hostel Warden: Mr. Amit Verma.
+445. Hostel: Hostel entry deadline is 9:30 PM for students.
+446. Hostel: Visitors are allowed only in the hostel reception area.
+447. Hostel: Mess breakfast timing is 7:30 AM to 9:00 AM.
+448. Hostel: Hostel complaint register is available at the warden office.
+449. Transport: College bus pass renewal starts on 1 June 2026.
+450. Transport: Transport office is located near Gate 2.
+451. Transport: Route 4 bus leaves Mansarovar at 7:35 AM.
+452. Transport: Route 7 bus leaves Vaishali Nagar at 7:25 AM.
+453. Transport: Lost bus pass replacement fee is 200 rupees.
+454. Placements: Placement Cell Coordinator: Ms. Neha Singh.
+455. Placements: Placement training begins on 10 June 2026 for final year students.
+456. Placements: Resume review sessions are held every Friday.
+457. Placements: Minimum CGPA for most placement drives is 6.5 unless company rules differ.
+458. Placements: Students must register on the placement portal before attending drives.
+459. Faculty Rules: Teachers must upload internal marks before the announced deadline.
+460. Faculty Rules: Faculty attendance must be recorded through biometric system.
+461. Faculty Rules: Class adjustment requests must be approved by the HOD.
+462. Faculty Rules: Lab allocation changes require written approval.
+463. Faculty Rules: Exam duty roster is published by the exam cell.
+464. Student Conduct: College ID card is mandatory on campus.
+465. Student Conduct: Ragging is strictly prohibited and punishable under college rules.
+466. Student Conduct: Mobile phones must be silent inside classrooms and labs.
+467. Student Conduct: Students must follow classroom discipline and faculty instructions.
+468. Student Conduct: Damage to college property may result in disciplinary action.
+469. Scholarships: Merit scholarship applications open on 5 July 2026.
+470. Scholarships: Need-based scholarship forms are available from the accounts office.
+471. Scholarships: Scholarship renewal requires latest marksheet and attendance record.
+472. Scholarships: Incomplete scholarship applications will not be processed.
+473. Scholarships: Scholarship committee meets on the first Monday of every month.
+474. Events: Annual tech fest TechNova is scheduled for 12 September 2026.
+475. Events: Cultural fest Aarambh is scheduled for 20 October 2026.
+476. Events: Sports week begins on 5 November 2026.
+477. Events: Department project expo is scheduled for 28 August 2026.
+478. Events: Event participation certificates are issued by the student activity cell.
+479. ERP Portal: ERP login uses student registration number as username.
+480. ERP Portal: Password reset requests are handled by the IT helpdesk.
+481. ERP Portal: Students can download fee receipts from the ERP portal.
+482. ERP Portal: Attendance reports are visible in the ERP portal.
+483. ERP Portal: Exam admit cards are published through the ERP portal.
+484. Canteen: Canteen timing is 8:30 AM to 5:30 PM.
+485. Canteen: Lunch combo is available from 12:30 PM to 2:30 PM.
+486. Canteen: Students must maintain cleanliness in the canteen area.
+487. Canteen: Outside vendors are not allowed inside academic blocks.
+488. Canteen: Canteen feedback can be submitted to student welfare office.
+489. Medical: Medical room is located in Block A near reception.
+490. Medical: First aid is available during college hours.
+491. Medical: Emergency ambulance support can be requested through the main office.
+492. Medical: Medical leave applications require supporting documents.
+493. Medical: Annual health camp is scheduled for 17 August 2026.
+494. Research: Project proposal submission deadline is 15 August 2026.
+495. Research: Research lab access requires faculty supervisor approval.
+496. Research: Students publishing papers must mention college affiliation correctly.
+497. Research: Innovation cell meets every Wednesday at 3:30 PM.
+498. Research: Patent support requests are handled by the R&D cell.
+499. Security: Main gate entry requires ID verification.
+500. Security: Vehicle parking sticker is mandatory for students and staff.
+501. Security: CCTV monitoring is active in common campus areas.
+502. Security: Lost and found items are collected at the security office.
+503. Security: After-hours lab access requires written permission.
+504. Academic Calendar: Odd semester classes begin on 18 July 2026.
+505. Academic Calendar: Mid-semester exams begin on 12 September 2026.
+506. Academic Calendar: Internal assessment submission ends on 30 September 2026.
+507. Academic Calendar: End-semester practical exams begin on 10 November 2026.
+508. Academic Calendar: Winter vacation begins on 24 December 2026.
+509. Admissions: B.Tech admission document verification is handled in Admin Block Room 101.
+510. Admissions: Admission helpdesk timing is 10:00 AM to 4:00 PM on working days.
+511. Admissions: Original marksheets must be carried for verification.
+512. Admissions: First year orientation is scheduled for 15 July 2026 in the main auditorium.
+513. Admissions: Late admission fee payment requires approval from the Registrar.
+514. Examinations: DBMS Exam Date: 24 May 2026, 10:00 AM, Block B, Room 204.
+515. Examinations: Operating Systems exam is scheduled on 27 May 2026 at 10:00 AM in Block B.
+516. Examinations: Data Structures practical exam is scheduled on 18 May 2026 in Computer Lab 2.
+517. Examinations: Students must carry college ID card and admit card for every exam.
+518. Examinations: Reporting time for semester exams is 30 minutes before exam start time.
+519. Attendance: Minimum Attendance Requirement: 75 percent in each subject.
+520. Attendance: Students below 75 percent attendance must meet the department mentor.
+521. Attendance: Medical leave is counted only after submitting approved medical documents.
+522. Attendance: Attendance shortage notices are published every month.
+523. Attendance: Parents may be informed if attendance falls below 65 percent.
+524. Computer Science Department: Department: Computer Science and Engineering.
+525. Computer Science Department: HOD: Dr. Rajesh Kumar.
+526. Computer Science Department: Operating Systems Faculty: Mrs. Shiwanki Sharma.
+527. Computer Science Department: DBMS Faculty: Mr. Arvind Mehta.
+528. Computer Science Department: Computer Networks Faculty: Dr. Pooja Sinha.
+529. Library: Library Timing: Monday to Saturday, 9:00 AM to 6:00 PM.
+530. Library: Students can issue up to 4 books at a time.

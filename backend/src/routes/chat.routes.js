@@ -1,0 +1,53 @@
+import { Router } from 'express';
+import { requireAuth } from '../middleware/auth.middleware.js';
+import { requireSupabase } from '../services/supabase.service.js';
+import { answerQuestion } from '../services/rag.service.js';
+
+const router = Router();
+
+router.post('/', requireAuth, async (req, res, next) => {
+  try {
+    const { question, session_id } = req.body;
+    if (!question?.trim()) {
+      const error = new Error('Question is required');
+      error.status = 400;
+      throw error;
+    }
+    const result = await answerQuestion({ question, profile: req.profile, sessionId: session_id });
+    res.json(result);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/sessions', requireAuth, async (req, res, next) => {
+  try {
+    const supabase = requireSupabase();
+    const { data, error } = await supabase
+      .from('chat_sessions')
+      .select('*')
+      .eq('user_id', req.profile.id)
+      .order('created_at', { ascending: false });
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+router.get('/sessions/:id', requireAuth, async (req, res, next) => {
+  try {
+    const supabase = requireSupabase();
+    const { data, error } = await supabase
+      .from('chat_messages')
+      .select('*')
+      .eq('session_id', req.params.id)
+      .order('created_at', { ascending: true });
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
+export default router;

@@ -1,0 +1,28 @@
+{
+  "name": "college-internal-gpt-backend",
+  "version": "0.1.0",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "create:admin": "node src/scripts/createAdmin.js",
+    "dev": "nodemon src/server.js",
+    "start": "node src/server.js"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.45.4",
+    "cors": "^2.8.5",
+    "csv-parse": "^5.5.6",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2",
+    "helmet": "^7.1.0",
+    "mammoth": "^1.8.0",
+    "multer": "^1.4.5-lts.1",
+    "openai": "^4.56.0",
+    "pdf-parse": "^1.1.1",
+    "uuid": "^10.0.0",
+    "ws": "^8.20.1"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
+  }
+}
