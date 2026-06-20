@@ -73,7 +73,7 @@ Backend: `http://localhost:5050/api/health`
 
 ## Deploy
 
-See [DEPLOYMENT.md](./DEPLOYMENT.md) for the Render + Vercel deployment guide.
+See [DEPLOYMENT.md](./DEPLOYMENT.md) for the Hostinger VPS deployment guide (Nginx + PM2).
 
 ## Demo Flow
 

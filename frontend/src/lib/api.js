@@ -1,6 +1,8 @@
 import { supabase, getSessionCached } from './supabaseClient';
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL || 'http://localhost:5000';
+// Empty string => same-origin relative requests (e.g. behind an Nginx /api proxy).
+// Unset => local dev default. Use ?? so an explicit "" is preserved.
+const API_BASE = import.meta.env.VITE_API_BASE_URL ?? 'http://localhost:5050';
 
 async function token() {
   if (!supabase) return null;

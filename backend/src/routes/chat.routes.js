@@ -1,11 +1,18 @@
 import { Router } from 'express';
 import { requireAuth } from '../middleware/auth.middleware.js';
+import { rateLimit } from '../middleware/rateLimit.middleware.js';
 import { requireSupabase } from '../services/supabase.service.js';
 import { answerQuestion } from '../services/rag.service.js';
 
 const router = Router();
 
-router.post('/', requireAuth, async (req, res, next) => {
+// Protect the paid LLM call: cap questions per authenticated user.
+const chatLimiter = rateLimit({
+  windowMs: Number(process.env.CHAT_RATE_WINDOW_MS || 60_000),
+  max: Number(process.env.CHAT_RATE_MAX || 15)
+});
+
+router.post('/', requireAuth, chatLimiter, async (req, res, next) => {
   try {
     const { question, session_id } = req.body;
     if (!question?.trim()) {
