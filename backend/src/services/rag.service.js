@@ -3,17 +3,66 @@ import { generateAnswer } from './openai.service.js';
 
 const NO_INFO = 'I do not have enough information in the uploaded college data.';
 
-function terms(text) {
-  return new Set(text.toLowerCase().match(/[a-z0-9]+/g)?.filter((word) => word.length > 2) || []);
+// Common English + question words that carry no retrieval signal.
+const STOPWORDS = new Set([
+  'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'had',
+  'her', 'was', 'one', 'our', 'out', 'has', 'his', 'how', 'man', 'new', 'now',
+  'old', 'see', 'two', 'way', 'who', 'did', 'its', 'let', 'put', 'say', 'she',
+  'too', 'use', 'what', 'when', 'where', 'which', 'whom', 'this', 'that', 'with',
+  'from', 'have', 'will', 'your', 'they', 'them', 'then', 'than', 'into', 'does',
+  'doing', 'about', 'there', 'their', 'would', 'could', 'should', 'please', 'tell',
+  'give', 'want', 'need', 'know', 'much', 'many', 'some', 'over', 'under', 'been',
+  'were', 'here', 'just', 'also', 'each', 'more', 'most', 'such', 'only', 'very'
+]);
+
+// Lightweight stemmer: collapses common plural/verb suffixes so
+// "exams" matches "exam", "fees" matches "fee", "timings" matches "timing".
+function stem(word) {
+  if (word.length <= 4) return word;
+  if (word.endsWith('ies')) return `${word.slice(0, -3)}y`;
+  if (word.endsWith('sses')) return word.slice(0, -2);
+  if (word.endsWith('ing') && word.length > 6) return word.slice(0, -3);
+  if (word.endsWith('es')) return word.slice(0, -2);
+  if (word.endsWith('s')) return word.slice(0, -1);
+  return word;
 }
 
-function scoreChunk(questionTerms, content) {
-  const contentTerms = terms(content);
-  let overlap = 0;
-  for (const term of questionTerms) {
-    if (contentTerms.has(term)) overlap += 1;
+function terms(text) {
+  const out = new Set();
+  for (const word of text.toLowerCase().match(/[a-z0-9]+/g) || []) {
+    if (word.length <= 2 || STOPWORDS.has(word)) continue;
+    out.add(stem(word));
   }
-  return overlap / Math.max(questionTerms.size, 1);
+  return out;
+}
+
+// Inverse-document-frequency weight: rarer terms across the corpus carry
+// more signal than terms that appear in nearly every chunk.
+function buildIdf(rows) {
+  const docFreq = new Map();
+  for (const row of rows) {
+    for (const term of terms(row.content)) {
+      docFreq.set(term, (docFreq.get(term) || 0) + 1);
+    }
+  }
+  const total = rows.length || 1;
+  const idf = new Map();
+  for (const [term, freq] of docFreq) {
+    idf.set(term, Math.log((total + 1) / (freq + 1)) + 1);
+  }
+  return idf;
+}
+
+function scoreChunk(questionTerms, content, idf) {
+  const contentTerms = terms(content);
+  let matched = 0;
+  let possible = 0;
+  for (const term of questionTerms) {
+    const weight = idf.get(term) || 1;
+    possible += weight;
+    if (contentTerms.has(term)) matched += weight;
+  }
+  return possible > 0 ? matched / possible : 0;
 }
 
 function allowedVisibility(role) {
@@ -39,13 +88,16 @@ export async function retrieveChunks({ question, profile, filters = {}, limit = 
   const { data, error } = await query.limit(250);
   if (error) throw error;
 
+  const rows = data || [];
   const questionTerms = terms(question);
-  return (data || [])
+  const idf = buildIdf(rows);
+
+  return rows
     .map((row) => ({
       id: row.id,
       content: row.content,
       chunk_index: row.chunk_index,
-      score: scoreChunk(questionTerms, row.content),
+      score: scoreChunk(questionTerms, row.content, idf),
       title: row.documents.title,
       document_id: row.documents.id,
       metadata: row.metadata
