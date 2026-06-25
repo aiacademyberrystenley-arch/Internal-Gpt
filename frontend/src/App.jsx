@@ -1,6 +1,6 @@
 import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { BookOpen, FileText, GraduationCap, LayoutDashboard, Loader2, LogOut, MessageSquare, Settings, User } from 'lucide-react';
+import { BookOpen, FileText, LayoutDashboard, Loader2, LogOut, MessageSquare, Settings, User } from 'lucide-react';
 import { supabase, supabaseConfigured } from './lib/supabaseClient';
 import { api } from './lib/api';
 import Login from './pages/Login';
@@ -31,12 +31,10 @@ function Shell({ profile, onLogout }) {
       <aside className="z-10 flex flex-col border-b border-slate-800 bg-slate-900 lg:border-b-0 lg:border-r">
         <div className="flex items-center justify-between px-5 py-5">
           <div className="flex items-center gap-3">
-            <div className="grid h-10 w-10 place-items-center rounded-lg bg-blue-600">
-              <GraduationCap size={20} className="text-white" />
-            </div>
+            <img src="/logo.png" alt="SRM IST" className="h-10 w-10 shrink-0 rounded-full bg-white object-contain" />
             <div>
-              <p className="text-[11px] font-semibold uppercase tracking-wider text-slate-400">ABC Institute</p>
-              <h1 className="text-lg font-bold leading-none text-white">Campus Assistant</h1>
+              <p className="text-[11px] font-semibold uppercase leading-tight tracking-wider text-slate-400">SRM Institute of<br />Science &amp; Technology</p>
+              <h1 className="mt-0.5 text-base font-bold leading-none text-white">Campus Assistant</h1>
             </div>
           </div>
           <button onClick={onLogout} className="focus-ring rounded-lg p-2 text-slate-400 hover:text-white lg:hidden" aria-label="Sign out">

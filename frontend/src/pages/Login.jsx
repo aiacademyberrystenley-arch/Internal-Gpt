@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { FileText, GraduationCap, LogIn, MessageSquare, ShieldCheck } from 'lucide-react';
+import { FileText, LogIn, MessageSquare, ShieldCheck } from 'lucide-react';
 import { supabase, supabaseConfigured } from '../lib/supabaseClient';
 import { api } from '../lib/api';
 
@@ -13,9 +13,7 @@ export default function Login({ onLogin }) {
     return (
       <div className="grid min-h-screen place-items-center px-4">
         <div className="card w-full max-w-lg p-8">
-          <div className="grid h-14 w-14 place-items-center rounded-xl bg-blue-600">
-            <GraduationCap className="text-white" size={28} />
-          </div>
+          <img src="/logo.png" alt="SRM IST" className="h-16 w-16 rounded-full bg-white object-contain" />
           <h1 className="mt-5 text-2xl font-bold text-white">Connect Supabase to start</h1>
           <p className="mt-2 text-sm text-slate-400">Copy the frontend and backend env examples, add Supabase keys, run the SQL schema, then create an admin account here.</p>
           <p className="mt-4 rounded-lg border border-slate-800 bg-slate-950 p-3 text-sm text-slate-400">
@@ -68,10 +66,8 @@ export default function Login({ onLogin }) {
       <div className="mx-auto grid min-h-[80vh] max-w-5xl items-center gap-8 lg:grid-cols-[1fr_420px]">
         {/* Intro */}
         <section className="hidden rounded-2xl border border-slate-800 bg-slate-900 p-10 lg:block">
-          <div className="grid h-14 w-14 place-items-center rounded-xl bg-blue-600">
-            <GraduationCap size={30} className="text-white" />
-          </div>
-          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-slate-400">ABC Institute</p>
+          <img src="/logo.png" alt="SRM IST" className="h-20 w-20 rounded-full bg-white object-contain" />
+          <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-slate-400">SRM Institute of Science and Technology</p>
           <h1 className="mt-2 text-4xl font-bold leading-tight text-white">Campus Assistant</h1>
           <p className="mt-4 max-w-md text-slate-400">
             The internal helpdesk for students and faculty. Ask a question and get a clear, sourced answer drawn from official college documents.
