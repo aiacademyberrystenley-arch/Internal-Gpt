@@ -43,6 +43,28 @@ router.get('/', requireAuth, async (req, res, next) => {
   }
 });
 
+router.patch('/:id', requireAuth, requireRole(['admin']), async (req, res, next) => {
+  try {
+    const title = (req.body?.title || '').trim();
+    if (!title) {
+      const error = new Error('Title is required');
+      error.status = 400;
+      throw error;
+    }
+    const supabase = requireSupabase();
+    const { data, error } = await supabase
+      .from('documents')
+      .update({ title })
+      .eq('id', req.params.id)
+      .select()
+      .single();
+    if (error) throw error;
+    res.json(data);
+  } catch (error) {
+    next(error);
+  }
+});
+
 router.delete('/:id', requireAuth, requireRole(['admin']), async (req, res, next) => {
   try {
     const supabase = requireSupabase();
