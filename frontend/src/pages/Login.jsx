@@ -244,6 +244,9 @@ export default function Login({ onLogin, notice }) {
           )}
         </form>
       </div>
+      <p className="mx-auto mt-8 max-w-5xl text-center text-xs text-slate-500">
+        Designed &amp; developed by <span className="font-semibold text-slate-300">Suraj Nandan</span>
+      </p>
     </div>
   );
 }
