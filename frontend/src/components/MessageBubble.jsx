@@ -1,5 +1,4 @@
 import { Bot, ThumbsDown, ThumbsUp } from 'lucide-react';
-import SourceCard from './SourceCard';
 
 export default function MessageBubble({ message, onFeedback }) {
   const isUser = message.role === 'user';
@@ -22,13 +21,6 @@ export default function MessageBubble({ message, onFeedback }) {
       <div className="max-w-3xl">
         <div className="card px-4 py-3 text-slate-100">
           <p className="whitespace-pre-wrap text-sm leading-6">{message.content}</p>
-          {message.sources?.length > 0 && (
-            <div className="mt-4 grid gap-2 md:grid-cols-2">
-              {message.sources.map((source) => (
-                <SourceCard key={`${source.document_id}-${source.chunk_index}`} source={source} />
-              ))}
-            </div>
-          )}
         </div>
         <div className="mt-2 flex items-center gap-2 pl-1">
           <span className="text-xs text-slate-500">Was this helpful?</span>

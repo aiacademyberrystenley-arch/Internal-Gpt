@@ -34,6 +34,9 @@ export async function requireAuth(req, _res, next) {
           email: data.user.email,
           full_name: metadata.full_name || data.user.email?.split('@')[0],
           role: metadata.role || 'student',
+          registration_number: metadata.registration_number || null,
+          degree: metadata.degree || null,
+          branch: metadata.branch || null,
           department: metadata.department || null,
           semester: metadata.semester || null
         })

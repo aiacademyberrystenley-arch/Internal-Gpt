@@ -1,10 +1,15 @@
 import { Router } from 'express';
+import multer from 'multer';
 import { requireAuth } from '../middleware/auth.middleware.js';
 import { rateLimit } from '../middleware/rateLimit.middleware.js';
 import { requireSupabase } from '../services/supabase.service.js';
 import { answerQuestion } from '../services/rag.service.js';
+import { extractText } from '../utils/extractText.js';
 
 const router = Router();
+
+// In-memory upload for per-message attachments (read for context, not stored).
+const upload = multer({ storage: multer.memoryStorage(), limits: { fileSize: 15 * 1024 * 1024 } });
 
 // Protect the paid LLM call: cap questions per authenticated user.
 const chatLimiter = rateLimit({
@@ -12,7 +17,8 @@ const chatLimiter = rateLimit({
   max: Number(process.env.CHAT_RATE_MAX || 15)
 });
 
-router.post('/', requireAuth, chatLimiter, async (req, res, next) => {
+// `upload.single` skips non-multipart requests, so plain JSON chats still work.
+router.post('/', requireAuth, chatLimiter, upload.single('file'), async (req, res, next) => {
   try {
     const { question, session_id } = req.body;
     if (!question?.trim()) {
@@ -20,7 +26,19 @@ router.post('/', requireAuth, chatLimiter, async (req, res, next) => {
       error.status = 400;
       throw error;
     }
-    const result = await answerQuestion({ question, profile: req.profile, sessionId: session_id });
+
+    let attachmentText = '';
+    if (req.file) {
+      try {
+        attachmentText = (await extractText(req.file)) || '';
+      } catch (extractError) {
+        const error = new Error(extractError.message || 'Could not read the attached file.');
+        error.status = 400;
+        throw error;
+      }
+    }
+
+    const result = await answerQuestion({ question, profile: req.profile, sessionId: session_id, attachmentText });
     res.json(result);
   } catch (error) {
     next(error);

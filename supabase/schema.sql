@@ -5,10 +5,18 @@ create table if not exists public.profiles (
   full_name text,
   email text unique,
   role text not null default 'student' check (role in ('admin', 'student', 'teacher', 'staff')),
+  registration_number text,
+  degree text,
+  branch text,
   department text,
   semester int,
   created_at timestamptz not null default now()
 );
+
+-- For existing databases, add the student detail columns if missing:
+alter table public.profiles add column if not exists registration_number text;
+alter table public.profiles add column if not exists degree text;
+alter table public.profiles add column if not exists branch text;
 
 create table if not exists public.documents (
   id uuid primary key default uuid_generate_v4(),

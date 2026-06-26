@@ -1,16 +1,17 @@
-import { NavLink, Navigate, Route, Routes, useNavigate } from 'react-router-dom';
+import { NavLink, Navigate, Route, Routes, useLocation, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { BookOpen, FileText, LayoutDashboard, Loader2, LogOut, MessageSquare, Settings, User } from 'lucide-react';
 import { supabase, supabaseConfigured } from './lib/supabaseClient';
 import { api } from './lib/api';
 import Login from './pages/Login';
+import ResetPassword from './pages/ResetPassword';
 import Chat from './pages/Chat';
 import AdminDashboard from './pages/AdminDashboard';
 import Documents from './pages/Documents';
 import Feedback from './pages/Feedback';
 import SettingsPage from './pages/Settings';
 
-function Shell({ profile, onLogout }) {
+function Shell({ profile, onLogout, onProfileUpdated }) {
   const links = [
     { to: '/chat', label: 'Assistant', icon: MessageSquare },
     { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, staff: true },
@@ -26,9 +27,16 @@ function Shell({ profile, onLogout }) {
     .join('')
     .toUpperCase();
 
+  const subtitle = profile?.role === 'student' && (profile?.degree || profile?.branch)
+    ? [profile.degree, profile.branch].filter(Boolean).join(' · ')
+    : profile?.role;
+
+  // The chat page has its own unified sidebar, so hide the app nav rail there.
+  const onChat = useLocation().pathname.startsWith('/chat');
+
   return (
-    <div className="min-h-screen lg:grid lg:grid-cols-[260px_1fr]">
-      <aside className="z-10 flex flex-col border-b border-slate-800 bg-slate-900 lg:border-b-0 lg:border-r">
+    <div className={onChat ? 'min-h-screen' : 'min-h-screen lg:grid lg:grid-cols-[260px_1fr]'}>
+      <aside className={`z-10 flex-col border-b border-slate-800 bg-slate-900 lg:border-b-0 lg:border-r ${onChat ? 'hidden' : 'flex'}`}>
         <div className="flex items-center justify-between px-5 py-5">
           <div className="flex items-center gap-3">
             <img src="/logo.png" alt="SRM IST" className="h-10 w-10 shrink-0 rounded-full bg-white object-contain" />
@@ -61,12 +69,15 @@ function Shell({ profile, onLogout }) {
 
         <div className="hidden border-t border-slate-800 p-3 lg:block">
           <div className="flex items-center gap-3 rounded-lg px-2 py-2">
-            <div className="grid h-9 w-9 shrink-0 place-items-center rounded-full bg-slate-800 text-xs font-semibold text-slate-200">
-              {initials || <User size={16} />}
+            <div className="relative shrink-0">
+              <div className="grid h-9 w-9 place-items-center rounded-full bg-blue-600 text-xs font-semibold text-white">
+                {initials || <User size={16} />}
+              </div>
+              <span className="absolute -bottom-0.5 -right-0.5 h-3 w-3 rounded-full border-2 border-slate-900 bg-emerald-400" />
             </div>
             <div className="min-w-0">
               <p className="truncate text-sm font-medium text-white">{profile?.full_name || profile?.email}</p>
-              <p className="truncate text-xs capitalize text-slate-400">{profile?.role}</p>
+              <p className="truncate text-xs capitalize text-slate-400">{subtitle}</p>
             </div>
           </div>
           <button onClick={onLogout} className="btn-ghost mt-2 w-full">
@@ -78,11 +89,11 @@ function Shell({ profile, onLogout }) {
       <main className="min-w-0">
         {profile ? (
           <Routes>
-            <Route path="/chat" element={<Chat profile={profile} />} />
+            <Route path="/chat" element={<Chat profile={profile} onLogout={onLogout} />} />
             <Route path="/dashboard" element={<AdminDashboard profile={profile} />} />
             <Route path="/documents" element={<Documents profile={profile} />} />
             <Route path="/feedback" element={<Feedback profile={profile} />} />
-            <Route path="/settings" element={<SettingsPage profile={profile} />} />
+            <Route path="/settings" element={<SettingsPage profile={profile} onUpdated={onProfileUpdated} />} />
             <Route path="*" element={<Navigate to="/chat" replace />} />
           </Routes>
         ) : null}
@@ -94,6 +105,8 @@ function Shell({ profile, onLogout }) {
 export default function App() {
   const [profile, setProfile] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [recovery, setRecovery] = useState(false);
+  const [authMessage, setAuthMessage] = useState('');
   const navigate = useNavigate();
 
   async function loadProfile() {
@@ -102,7 +115,16 @@ export default function App() {
       const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s timeout
       const data = await api('/api/auth/me', { signal: controller.signal });
       clearTimeout(timeoutId);
-      setProfile(data.profile);
+      const p = data.profile;
+      // Only institute (@srmist.edu.in) accounts may sign in; admins are exempt.
+      if (p && p.role !== 'admin' && !String(p.email || '').toLowerCase().endsWith('@srmist.edu.in')) {
+        await supabase.auth.signOut();
+        setProfile(null);
+        setAuthMessage('Only @srmist.edu.in accounts can sign in. Please use your institute email.');
+        return;
+      }
+      setAuthMessage('');
+      setProfile(p);
     } catch (error) {
       if (error.name === 'AbortError') console.warn('Profile load timeout — backend may not be running');
       else console.warn('Profile load error:', error.message);
@@ -134,7 +156,14 @@ export default function App() {
     };
 
     doLoad();
-    const { data } = supabase.auth.onAuthStateChange(() => loadProfile());
+    const { data } = supabase.auth.onAuthStateChange((event) => {
+      if (event === 'PASSWORD_RECOVERY') {
+        setRecovery(true);
+        setLoading(false);
+        return;
+      }
+      loadProfile();
+    });
 
     return () => {
       clearTimeout(fallbackTimer);
@@ -146,6 +175,10 @@ export default function App() {
     if (supabase) await supabase.auth.signOut();
     setProfile(null);
     navigate('/login');
+  }
+
+  if (recovery) {
+    return <ResetPassword onDone={() => { setRecovery(false); navigate('/login'); }} />;
   }
 
   if (loading) {
@@ -160,8 +193,8 @@ export default function App() {
   }
 
   if (!profile) {
-    return <Login onLogin={loadProfile} />;
+    return <Login onLogin={loadProfile} notice={authMessage} />;
   }
 
-  return <Shell profile={profile} onLogout={logout} />;
+  return <Shell profile={profile} onLogout={logout} onProfileUpdated={loadProfile} />;
 }

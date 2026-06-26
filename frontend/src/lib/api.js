@@ -18,7 +18,7 @@ export async function api(path, options = {}) {
 
   const controller = options.signal ? null : new AbortController();
   const signal = options.signal || controller?.signal;
-  const timeoutId = controller ? setTimeout(() => controller.abort(), 10000) : null; // 10s timeout
+  const timeoutId = controller ? setTimeout(() => controller.abort(), options.timeoutMs || 10000) : null;
 
   try {
     const response = await fetch(`${API_BASE}${path}`, { ...options, headers, signal });

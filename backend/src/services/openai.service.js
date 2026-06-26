@@ -8,8 +8,25 @@ export const isOpenAIConfigured = Boolean(openaiApiKey && !openaiApiKey.includes
 export const isGroqConfigured = Boolean(groqApiKey && !groqApiKey.includes('your_'));
 export const openai = isOpenAIConfigured ? new OpenAI({ apiKey: openaiApiKey }) : null;
 
-function localAnswer({ question, chunks }) {
-  const joined = chunks.map((chunk) => chunk.content).join('\n\n');
+const SYSTEM_PROMPT =
+  'You are an internal college helpdesk assistant. Answer using the supplied context, which may include official college documents and a file the user attached to this message. Prefer the user-attached material when it is relevant to their question. If the context is insufficient, say: I do not have enough information in the uploaded college data.';
+
+const ATTACHMENT_LIMIT = 6000;
+
+// Combine the user's attached file (if any) with retrieved college-document chunks.
+function buildContext({ chunks, attachmentText = '' }) {
+  const parts = [];
+  if (attachmentText && attachmentText.trim()) {
+    parts.push(`[User-attached file]\n${attachmentText.trim().slice(0, ATTACHMENT_LIMIT)}`);
+  }
+  chunks.forEach((chunk, index) => {
+    parts.push(`[Source ${index + 1}: ${chunk.title || 'Document'}]\n${chunk.content}`);
+  });
+  return parts.join('\n\n');
+}
+
+function localAnswer({ question, chunks, attachmentText = '' }) {
+  const joined = [attachmentText, ...chunks.map((chunk) => chunk.content)].filter(Boolean).join('\n\n');
   const lines = joined.split('\n').map((line) => line.trim()).filter(Boolean);
   const questionTerms = new Set(question.toLowerCase().match(/[a-z0-9]+/g) || []);
 
@@ -32,18 +49,16 @@ function localAnswer({ question, chunks }) {
   return `Based on the uploaded college data: ${joined.slice(0, 700)}${joined.length > 700 ? '...' : ''}`;
 }
 
-export async function generateAnswer({ question, chunks }) {
+export async function generateAnswer({ question, chunks, attachmentText = '' }) {
   if (provider === 'groq' && isGroqConfigured) {
-    return generateGroqAnswer({ question, chunks });
+    return generateGroqAnswer({ question, chunks, attachmentText });
   }
 
   if (!isOpenAIConfigured) {
-    return localAnswer({ question, chunks });
+    return localAnswer({ question, chunks, attachmentText });
   }
 
-  const context = chunks
-    .map((chunk, index) => `[Source ${index + 1}: ${chunk.title || 'Document'}]\n${chunk.content}`)
-    .join('\n\n');
+  const context = buildContext({ chunks, attachmentText });
 
   try {
     const response = await openai.responses.create({
@@ -51,7 +66,7 @@ export async function generateAnswer({ question, chunks }) {
       input: [
         {
           role: 'system',
-          content: 'You are an internal college helpdesk assistant. Answer only from the supplied context. If the context is insufficient, say: I do not have enough information in the uploaded college data.'
+          content: SYSTEM_PROMPT
         },
         {
           role: 'user',
@@ -64,16 +79,14 @@ export async function generateAnswer({ question, chunks }) {
   } catch (error) {
     if ([429, 500, 503].includes(error.status)) {
       console.warn(`OpenAI unavailable (${error.status}); using local extractive fallback.`);
-      return localAnswer({ question, chunks });
+      return localAnswer({ question, chunks, attachmentText });
     }
     throw error;
   }
 }
 
-async function generateGroqAnswer({ question, chunks }) {
-  const context = chunks
-    .map((chunk, index) => `[Source ${index + 1}: ${chunk.title || 'Document'}]\n${chunk.content}`)
-    .join('\n\n');
+async function generateGroqAnswer({ question, chunks, attachmentText = '' }) {
+  const context = buildContext({ chunks, attachmentText });
 
   const controller = new AbortController();
   const timeout = setTimeout(() => controller.abort(), Number(process.env.AI_TIMEOUT_MS || 12000));
@@ -93,7 +106,7 @@ async function generateGroqAnswer({ question, chunks }) {
         messages: [
           {
             role: 'system',
-            content: 'You are an internal college helpdesk assistant. Answer only from the supplied context. If the context is insufficient, say: I do not have enough information in the uploaded college data.'
+            content: SYSTEM_PROMPT
           },
           {
             role: 'user',
@@ -115,7 +128,7 @@ async function generateGroqAnswer({ question, chunks }) {
   } catch (error) {
     if (error.name === 'AbortError' || [429, 500, 503].includes(error.status)) {
       console.warn(`Groq unavailable (${error.status || 'timeout'}); using local extractive fallback.`);
-      return localAnswer({ question, chunks });
+      return localAnswer({ question, chunks, attachmentText });
     }
     throw error;
   } finally {

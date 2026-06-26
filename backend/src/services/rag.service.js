@@ -107,11 +107,15 @@ export async function retrieveChunks({ question, profile, filters = {}, limit = 
     .slice(0, limit);
 }
 
-export async function answerQuestion({ question, profile, sessionId }) {
+export async function answerQuestion({ question, profile, sessionId, attachmentText = '' }) {
   const supabase = requireSupabase();
   const chunks = await retrieveChunks({ question, profile });
   const strongChunks = chunks.filter((chunk) => chunk.score >= 0.12);
-  const answer = strongChunks.length ? await generateAnswer({ question, chunks: strongChunks }) : NO_INFO;
+  const hasAttachment = Boolean(attachmentText && attachmentText.trim());
+  // Answer when we have matching college docs OR the user attached their own material.
+  const answer = strongChunks.length || hasAttachment
+    ? await generateAnswer({ question, chunks: strongChunks, attachmentText })
+    : NO_INFO;
 
   const sources = strongChunks.map((chunk, index) => ({
     label: `Source ${index + 1}`,
