@@ -395,9 +395,9 @@ export default function Chat({ profile, onLogout }) {
                 <p className="mt-10 flex items-center justify-center gap-1.5 text-xs text-slate-500">
                   <Lock size={12} /> Secure · Private · Trusted
                 </p>
-                <p className="mt-2 text-center text-xs text-slate-600">
+                {/* <p className="mt-2 text-center text-xs text-slate-600">
                   Designed &amp; developed by <span className="font-semibold text-slate-400">Suraj Nandan</span>
-                </p>
+                </p> */}
               </div>
             </div>
           ) : (
