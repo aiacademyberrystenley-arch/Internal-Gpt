@@ -1,14 +1,14 @@
 import { useState } from 'react';
-import { FileText, LogIn, Mail, MessageSquare, ShieldCheck } from 'lucide-react';
+import { FileText, Globe, LogIn, Mail, MessageSquare, ShieldCheck } from 'lucide-react';
 import { supabase, supabaseConfigured } from '../lib/supabaseClient';
 import { api } from '../lib/api';
 
 const INSTITUTE_DOMAIN = '@srmist.edu.in';
 const isInstituteEmail = (email) => email.trim().toLowerCase().endsWith(INSTITUTE_DOMAIN);
 
-export default function Login({ onLogin, notice }) {
+export default function Login({ onLogin, onGuest, notice }) {
   const [mode, setMode] = useState('signin'); // 'signin' | 'signup' | 'forgot'
-  const [form, setForm] = useState({ email: '', password: '', full_name: '', role: 'student', registration_number: '', degree: '', branch: '', department: '', semester: 6 });
+  const [form, setForm] = useState({ email: '', password: '', full_name: '', phone: '', role: 'student', registration_number: '', degree: '', branch: '', department: '', semester: 6 });
   const [error, setError] = useState('');
   const [confirmSent, setConfirmSent] = useState(false);
   const [resetSent, setResetSent] = useState(false);
@@ -43,6 +43,15 @@ export default function Login({ onLogin, notice }) {
     setConfirmSent(false);
     setResetSent(false);
     try {
+      if (mode === 'guest') {
+        if (!form.full_name.trim()) throw new Error('Please enter your name.');
+        if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(form.email.trim())) throw new Error('Please enter a valid email address.');
+        const phone = form.phone.trim();
+        if (!/^[+]?[\d\s().-]{7,20}$/.test(phone)) throw new Error('Please enter a valid phone number.');
+        await onGuest?.({ full_name: form.full_name.trim(), email: form.email.trim(), phone });
+        return;
+      }
+
       if (mode === 'forgot') {
         // Reset is for institute members only; admins use external email and are excluded.
         if (!isInstituteEmail(form.email)) {
@@ -102,7 +111,8 @@ export default function Login({ onLogin, notice }) {
   const titles = {
     signin: { h: 'Sign in', p: 'Use your institute credentials to continue.' },
     signup: { h: 'Create account', p: 'Register with your @srmist.edu.in email.' },
-    forgot: { h: 'Reset password', p: 'We’ll email you a link to set a new password.' }
+    forgot: { h: 'Reset password', p: 'We’ll email you a link to set a new password.' },
+    guest: { h: 'Continue as guest', p: 'Enter your details to explore public SRM info.' }
   };
 
   return (
@@ -112,7 +122,7 @@ export default function Login({ onLogin, notice }) {
         <section className="hidden rounded-2xl border border-slate-800 bg-slate-900 p-10 lg:block">
           <img src="/logo.png" alt="SRM IST" className="h-20 w-20 rounded-full bg-white object-contain" />
           <p className="mt-6 text-sm font-semibold uppercase tracking-wider text-slate-400">SRM Institute of Science and Technology</p>
-          <h1 className="mt-2 text-4xl font-bold leading-tight text-white">Campus Assistant</h1>
+          <h1 className="mt-2 text-4xl font-bold leading-tight text-white"> SRM-GPT</h1>
           <p className="mt-4 max-w-md text-slate-400">
             The internal helpdesk for students and faculty. Ask a question and get a clear, sourced answer drawn from official college documents.
           </p>
@@ -139,11 +149,14 @@ export default function Login({ onLogin, notice }) {
           {notice && <p className="mt-4 rounded-lg border border-amber-500/30 bg-amber-500/10 p-3 text-sm text-amber-300">{notice}</p>}
 
           <div className="mt-6 space-y-3">
-            {mode === 'signup' && (
-              <input className="input" placeholder="Full name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} />
+            {(mode === 'signup' || mode === 'guest') && (
+              <input className="input" placeholder="Full name" value={form.full_name} onChange={(e) => setForm({ ...form, full_name: e.target.value })} required={mode === 'guest'} />
             )}
-            <input className="input" placeholder="Email (@srmist.edu.in)" type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
-            {mode !== 'forgot' && (
+            <input className="input" placeholder={mode === 'guest' ? 'Email' : 'Email (@srmist.edu.in)'} type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} required />
+            {mode === 'guest' && (
+              <input className="input" placeholder="Phone number" type="tel" value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} required />
+            )}
+            {mode !== 'forgot' && mode !== 'guest' && (
               <input className="input" placeholder="Password" type="password" value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required />
             )}
             {mode === 'signup' && (
@@ -230,17 +243,30 @@ export default function Login({ onLogin, notice }) {
           {error && <p className="mt-4 rounded-lg border border-rose-500/30 bg-rose-500/10 p-3 text-sm text-rose-300">{error}</p>}
 
           <button disabled={busy} className="btn-primary mt-5 w-full py-3 text-base">
-            <LogIn size={18} /> {busy ? 'Working…' : mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : 'Send reset link'}
+            <LogIn size={18} /> {busy ? 'Working…' : mode === 'signin' ? 'Sign in' : mode === 'signup' ? 'Create account' : mode === 'guest' ? 'Enter as guest' : 'Send reset link'}
           </button>
 
-          {mode === 'forgot' ? (
+          {mode === 'forgot' || mode === 'guest' ? (
             <button type="button" onClick={() => switchMode('signin')} className="mt-4 w-full text-center text-sm font-medium text-blue-400 hover:text-blue-300">
-              Back to sign in
+              ← Back to sign in
             </button>
           ) : (
             <button type="button" onClick={() => switchMode(mode === 'signin' ? 'signup' : 'signin')} className="mt-4 w-full text-center text-sm font-medium text-blue-400 hover:text-blue-300">
               {mode === 'signin' ? 'New here? Create an account' : 'Already have an account? Sign in'}
             </button>
+          )}
+
+          {(mode === 'signin' || mode === 'signup') && (
+            <>
+              <div className="my-5 flex items-center gap-3">
+                <span className="h-px flex-1 bg-slate-800" />
+                <span className="text-xs uppercase tracking-wider text-slate-500">or</span>
+                <span className="h-px flex-1 bg-slate-800" />
+              </div>
+              <button type="button" onClick={() => switchMode('guest')} className="btn-ghost w-full py-3 text-base">
+                <Globe size={18} /> Continue as guest
+              </button>
+            </>
           )}
         </form>
       </div>

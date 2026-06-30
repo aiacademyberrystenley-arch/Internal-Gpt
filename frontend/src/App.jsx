@@ -42,7 +42,7 @@ function Shell({ profile, onLogout, onProfileUpdated }) {
             <img src="/logo.png" alt="SRM IST" className="h-10 w-10 shrink-0 rounded-full bg-white object-contain" />
             <div>
               <p className="text-[11px] font-semibold uppercase leading-tight tracking-wider text-slate-400">SRM Institute of<br />Science &amp; Technology</p>
-              <h1 className="mt-0.5 text-base font-bold leading-none text-white">Campus Assistant</h1>
+              <h1 className="mt-0.5 text-base font-bold leading-none text-white"> SRM-GPT</h1>
             </div>
           </div>
           <button onClick={onLogout} className="focus-ring rounded-lg p-2 text-slate-400 hover:text-white lg:hidden" aria-label="Sign out">
@@ -88,14 +88,21 @@ function Shell({ profile, onLogout, onProfileUpdated }) {
 
       <main className="min-w-0">
         {profile ? (
-          <Routes>
-            <Route path="/chat" element={<Chat profile={profile} onLogout={onLogout} />} />
-            <Route path="/dashboard" element={<AdminDashboard profile={profile} />} />
-            <Route path="/documents" element={<Documents profile={profile} />} />
-            <Route path="/feedback" element={<Feedback profile={profile} />} />
-            <Route path="/settings" element={<SettingsPage profile={profile} onUpdated={onProfileUpdated} />} />
-            <Route path="*" element={<Navigate to="/chat" replace />} />
-          </Routes>
+          profile.role === 'guest' ? (
+            <Routes>
+              <Route path="/chat" element={<Chat profile={profile} onLogout={onLogout} />} />
+              <Route path="*" element={<Navigate to="/chat" replace />} />
+            </Routes>
+          ) : (
+            <Routes>
+              <Route path="/chat" element={<Chat profile={profile} onLogout={onLogout} />} />
+              <Route path="/dashboard" element={<AdminDashboard profile={profile} />} />
+              <Route path="/documents" element={<Documents profile={profile} />} />
+              <Route path="/feedback" element={<Feedback profile={profile} />} />
+              <Route path="/settings" element={<SettingsPage profile={profile} onUpdated={onProfileUpdated} />} />
+              <Route path="*" element={<Navigate to="/chat" replace />} />
+            </Routes>
+          )
         ) : null}
       </main>
     </div>
@@ -171,6 +178,22 @@ export default function App() {
     };
   }, []);
 
+  // Public, no-login mode. The visitor identifies with a name + email on the
+  // guest login step; answers still come only from the two official SRM
+  // websites, nothing is persisted and no Supabase session is created.
+  function enterGuest({ full_name, email, phone } = {}) {
+    setAuthMessage('');
+    const name = (full_name || '').trim() || 'Guest';
+    const mail = (email || '').trim() || null;
+    const tel = (phone || '').trim() || null;
+    setProfile({ id: 'guest', role: 'guest', full_name: name, email: mail, isGuest: true });
+    // Best-effort lead capture for follow-up (saved to guest_leads; never blocks entry).
+    if (mail || tel) {
+      api('/api/guest/lead', { method: 'POST', body: JSON.stringify({ name, email: mail, phone: tel }) }).catch(() => {});
+    }
+    navigate('/chat');
+  }
+
   async function logout() {
     if (supabase) await supabase.auth.signOut();
     setProfile(null);
@@ -193,7 +216,7 @@ export default function App() {
   }
 
   if (!profile) {
-    return <Login onLogin={loadProfile} notice={authMessage} />;
+    return <Login onLogin={loadProfile} onGuest={enterGuest} notice={authMessage} />;
   }
 
   return <Shell profile={profile} onLogout={logout} onProfileUpdated={loadProfile} />;

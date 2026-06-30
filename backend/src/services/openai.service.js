@@ -136,6 +136,53 @@ async function generateGroqAnswer({ question, chunks, attachmentText = '' }) {
   }
 }
 
+// Generic single-turn completion with a custom system prompt and no retrieval
+// context. Routes through the same provider chain as generateAnswer (Groq →
+// OpenAI). Returns the model text, or null when no provider is configured.
+export async function completeChat({ system, user, maxTokens = 400, temperature = 0.1 }) {
+  if (provider === 'groq' && isGroqConfigured) {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), Number(process.env.AI_TIMEOUT_MS || 12000));
+    try {
+      const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+        method: 'POST',
+        signal: controller.signal,
+        headers: {
+          Authorization: `Bearer ${groqApiKey}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: process.env.GROQ_MODEL || 'llama-3.1-8b-instant',
+          temperature,
+          max_completion_tokens: maxTokens,
+          messages: [
+            { role: 'system', content: system },
+            { role: 'user', content: user }
+          ]
+        })
+      });
+      if (!response.ok) throw new Error(`Groq API error ${response.status}`);
+      const data = await response.json();
+      return data.choices?.[0]?.message?.content || null;
+    } finally {
+      clearTimeout(timeout);
+    }
+  }
+
+  if (isOpenAIConfigured && openai) {
+    const response = await openai.responses.create({
+      model: process.env.OPENAI_MODEL || 'gpt-4.1-mini',
+      input: [
+        { role: 'system', content: system },
+        { role: 'user', content: user }
+      ]
+    });
+    return response.output_text || null;
+  }
+
+  return null;
+}
+
 export async function uploadToVectorStore() {
   return { openai_file_id: null, vector_store_id: process.env.OPENAI_VECTOR_STORE_ID || null };
 }

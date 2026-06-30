@@ -45,6 +45,20 @@ const ROLE_CONTENT = {
 };
 ROLE_CONTENT.admin = ROLE_CONTENT.student;
 
+// Guests get only public info available on the two official SRM websites.
+ROLE_CONTENT.guest = {
+  tagline: 'Ask about SRM — answered from the official websites.',
+  topics: [
+    { icon: GraduationCap, label: 'Admissions', text: 'Eligibility & how to apply', prompt: 'What are the admission process and eligibility requirements at SRM?' },
+    { icon: BookOpen, label: 'Programs', text: 'Courses & departments', prompt: 'What undergraduate and postgraduate programs does SRM offer?' },
+    { icon: Building2, label: 'Campus', text: 'Facilities & locations', prompt: 'What facilities and campuses does SRM have?' },
+    { icon: Award, label: 'Placements', text: 'Recruiters & highlights', prompt: 'What are the placement highlights at SRM?' },
+    { icon: Wallet, label: 'Fees & Scholarships', text: 'Fee structure & aid', prompt: 'What is the fee structure and what scholarships are available at SRM?' },
+    { icon: LifeBuoy, label: 'Contact', text: 'Reach the institute', prompt: 'How do I contact SRM for admission enquiries?' }
+  ],
+  quick: ['How to apply for admission?', 'Which programs are offered?', 'Placement highlights', 'Scholarships available', 'Campus locations', 'Admission contact details']
+};
+
 // Group sessions into Today / Yesterday / Earlier buckets.
 function groupSessions(sessions) {
   const today = new Date();
@@ -61,7 +75,7 @@ function groupSessions(sessions) {
   return groups;
 }
 
-function TypingDots() {
+function TypingDots({ label = 'Searching college documents…' }) {
   return (
     <div className="flex w-fit items-center gap-2 rounded-xl border border-slate-800 bg-slate-900 px-4 py-3">
       <Bot size={16} className="text-blue-400" />
@@ -70,7 +84,7 @@ function TypingDots() {
           <span key={i} className="h-1.5 w-1.5 rounded-full bg-slate-400 animate-bounceDot" style={{ animationDelay: `${i * 0.15}s` }} />
         ))}
       </span>
-      <span className="text-xs text-slate-500">Searching college documents…</span>
+      <span className="text-xs text-slate-500">{label}</span>
     </div>
   );
 }
@@ -89,12 +103,17 @@ export default function Chat({ profile, onLogout }) {
   const inputRef = useRef(null);
   const navigate = useNavigate();
 
-  const navItems = [
-    { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, staff: true },
-    { to: '/documents', label: 'Documents', icon: FileText, staff: true },
-    { to: '/feedback', label: 'Feedback', icon: BookOpen, staff: true },
-    { to: '/settings', label: 'Profile', icon: Settings }
-  ].filter((item) => !item.staff || profile.role === 'admin' || profile.role === 'teacher');
+  const isGuest = profile.role === 'guest';
+
+  // Guests have no account, so only the institute nav (which needs auth) is hidden.
+  const navItems = isGuest
+    ? []
+    : [
+        { to: '/dashboard', label: 'Dashboard', icon: LayoutDashboard, staff: true },
+        { to: '/documents', label: 'Documents', icon: FileText, staff: true },
+        { to: '/feedback', label: 'Feedback', icon: BookOpen, staff: true },
+        { to: '/settings', label: 'Profile', icon: Settings }
+      ].filter((item) => !item.staff || profile.role === 'admin' || profile.role === 'teacher');
 
   const initials = (profile.full_name || profile.email || '?')
     .split(' ')
@@ -108,6 +127,8 @@ export default function Chat({ profile, onLogout }) {
     : profile.role;
 
   async function loadSessions() {
+    // Guests have no account, so saved-chat history doesn't apply.
+    if (isGuest) return;
     try {
       setSessions(await api('/api/chat/sessions'));
     } catch {
@@ -145,7 +166,11 @@ export default function Chat({ profile, onLogout }) {
     setLoading(true);
     try {
       let result;
-      if (file) {
+      if (isGuest) {
+        // Public mode: answered only from the two official SRM websites. No auth,
+        // no attachments, no saved session.
+        result = await api('/api/guest/chat', { method: 'POST', body: JSON.stringify({ question: trimmed }), timeoutMs: 60000 });
+      } else if (file) {
         const body = new FormData();
         body.append('question', trimmed || 'Please read the attached file and help me with it.');
         if (sessionId) body.append('session_id', sessionId);
@@ -154,9 +179,9 @@ export default function Chat({ profile, onLogout }) {
       } else {
         result = await api('/api/chat', { method: 'POST', body: JSON.stringify({ question: trimmed, session_id: sessionId }) });
       }
-      setSessionId(result.session_id);
+      if (result.session_id) setSessionId(result.session_id);
       setMessages((current) => [...current, { role: 'assistant', content: result.answer, sources: result.sources }]);
-      loadSessions();
+      if (!isGuest) loadSessions();
     } catch (error) {
       setMessages((current) => [...current, { role: 'assistant', content: error.message, sources: [] }]);
     } finally {
@@ -179,7 +204,7 @@ export default function Chat({ profile, onLogout }) {
     </div>
   );
 
-  const attachButton = (
+  const attachButton = isGuest ? null : (
     <label className="focus-ring grid h-11 w-11 shrink-0 cursor-pointer place-items-center rounded-xl text-slate-400 transition-colors hover:bg-slate-800 hover:text-white" title="Attach image, PDF, Excel, Word or text">
       <Paperclip size={18} />
       <input
@@ -217,7 +242,7 @@ export default function Chat({ profile, onLogout }) {
           <img src="/logo.png" alt="SRM IST" className="h-10 w-10 shrink-0 rounded-full bg-white object-contain" />
           <div className="min-w-0">
             <p className="truncate text-[11px] font-semibold uppercase tracking-wider text-slate-400">SRM Institute of Science &amp; Technology</p>
-            <h1 className="text-base font-bold leading-tight text-white">Campus Assistant</h1>
+            <h1 className="text-base font-bold leading-tight text-white"> SRM-GPT</h1>
           </div>
         </div>
 
@@ -233,19 +258,26 @@ export default function Chat({ profile, onLogout }) {
             <Plus size={16} /> New chat
           </button>
 
-          <div className="relative mt-3">
-            <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
-            <input
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search chats"
-              className="focus-ring w-full rounded-lg border border-slate-800 bg-slate-950 py-2 pl-9 pr-3 text-sm text-slate-200 placeholder:text-slate-500"
-            />
-          </div>
+          {!isGuest && (
+            <div className="relative mt-3">
+              <Search size={15} className="pointer-events-none absolute left-3 top-1/2 -translate-y-1/2 text-slate-500" />
+              <input
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                placeholder="Search chats"
+                className="focus-ring w-full rounded-lg border border-slate-800 bg-slate-950 py-2 pl-9 pr-3 text-sm text-slate-200 placeholder:text-slate-500"
+              />
+            </div>
+          )}
 
           <div className="mt-4 flex-1 space-y-4 overflow-y-auto pr-1">
-            {filteredSessions.length === 0 && <p className="px-1 text-xs text-slate-500">No conversations yet.</p>}
-            {Object.entries(grouped).map(([label, list]) =>
+            {isGuest && (
+              <div className="rounded-lg border border-blue-500/20 bg-blue-500/5 p-3 text-xs text-slate-400">
+                <p className="font-semibold text-blue-300">Guest mode</p>
+                 </div>
+            )}
+            {!isGuest && filteredSessions.length === 0 && <p className="px-1 text-xs text-slate-500">No conversations yet.</p>}
+            {!isGuest && Object.entries(grouped).map(([label, list]) =>
               list.length ? (
                 <div key={label}>
                   <p className="px-1 text-[11px] font-semibold uppercase tracking-wider text-slate-500">{label}</p>
@@ -349,7 +381,7 @@ export default function Chat({ profile, onLogout }) {
                       }}
                       rows={2}
                       className="w-full resize-none bg-transparent px-2 py-1.5 text-[15px] text-white placeholder:text-slate-500 focus:outline-none"
-                      placeholder="Ask anything about academics, hostel, placements…"
+                      placeholder={isGuest ? 'Ask about admissions, programs, campus, placements…' : 'Ask anything about academics, hostel, placements…'}
                     />
                     <div className="mt-1 flex items-center justify-between">
                       {attachButton}
@@ -403,9 +435,9 @@ export default function Chat({ profile, onLogout }) {
           ) : (
             <div className="mx-auto max-w-3xl space-y-4 px-5 py-6">
               {messages.map((message, index) => (
-                <MessageBubble key={index} message={message} onFeedback={sendFeedback} />
+                <MessageBubble key={index} message={message} onFeedback={isGuest ? undefined : sendFeedback} />
               ))}
-              {loading && <TypingDots />}
+              {loading && <TypingDots label={isGuest ? 'Searching SRM websites…' : 'Searching college documents…'} />}
               {notice && <p className="text-sm font-medium text-emerald-400">{notice}</p>}
             </div>
           )}

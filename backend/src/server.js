@@ -5,6 +5,7 @@ import helmet from 'helmet';
 import authRoutes from './routes/auth.routes.js';
 import documentRoutes from './routes/document.routes.js';
 import chatRoutes from './routes/chat.routes.js';
+import guestRoutes from './routes/guest.routes.js';
 import feedbackRoutes from './routes/feedback.routes.js';
 import dashboardRoutes from './routes/dashboard.routes.js';
 
@@ -26,6 +27,7 @@ app.get('/api/health', (_req, res) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/documents', documentRoutes);
 app.use('/api/chat', chatRoutes);
+app.use('/api/guest', guestRoutes);
 app.use('/api/feedback', feedbackRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 

@@ -1,5 +1,6 @@
 import { requireSupabase } from './supabase.service.js';
 import { generateAnswer } from './openai.service.js';
+import { generateRichAnswer, isAnthropicConfigured } from './claude.service.js';
 
 const NO_INFO = 'I do not have enough information in the uploaded college data.';
 
@@ -112,10 +113,25 @@ export async function answerQuestion({ question, profile, sessionId, attachmentT
   const chunks = await retrieveChunks({ question, profile });
   const strongChunks = chunks.filter((chunk) => chunk.score >= 0.12);
   const hasAttachment = Boolean(attachmentText && attachmentText.trim());
-  // Answer when we have matching college docs OR the user attached their own material.
-  const answer = strongChunks.length || hasAttachment
-    ? await generateAnswer({ question, chunks: strongChunks, attachmentText })
-    : NO_INFO;
+
+  let answer;
+  if (isAnthropicConfigured) {
+    // Claude handles every signed-in request — plain answers, tables, notes,
+    // charts, diagrams, mind maps — grounded in the retrieved campus documents.
+    try {
+      answer = await generateRichAnswer({ question, chunks: strongChunks, attachmentText });
+    } catch (error) {
+      console.warn(`Claude unavailable (${error.status || error.message}); falling back to default model.`);
+      answer = strongChunks.length || hasAttachment
+        ? await generateAnswer({ question, chunks: strongChunks, attachmentText })
+        : NO_INFO;
+    }
+  } else if (strongChunks.length || hasAttachment) {
+    // Fallback when Claude isn't configured: answer from matching docs or the attachment.
+    answer = await generateAnswer({ question, chunks: strongChunks, attachmentText });
+  } else {
+    answer = NO_INFO;
+  }
 
   const sources = strongChunks.map((chunk, index) => ({
     label: `Source ${index + 1}`,
