@@ -63,23 +63,40 @@ export async function createUpload({ file, metadata, profile }) {
   if (uploadError) throw uploadError;
 
   const { data: publicUrl } = supabase.storage.from(bucket).getPublicUrl(storagePath);
-  const { data: document, error: documentError } = await supabase
-    .from('documents')
-    .insert({
-      title: metadata.title || file.originalname,
-      file_url: publicUrl.publicUrl,
-      file_type: file.mimetype || extension,
-      category: metadata.category,
-      department: metadata.department,
-      semester: metadata.semester ? Number(metadata.semester) : null,
-      visibility: metadata.visibility || 'student',
-      academic_year: metadata.academic_year,
-      tags: metadata.tags ? metadata.tags.split(',').map((tag) => tag.trim()).filter(Boolean) : [],
-      status: 'processing',
-      uploaded_by: profile.id
-    })
-    .select()
-    .single();
+
+  // Audience: explicit list of roles allowed to see this document (multi-select).
+  // The legacy single `visibility` value is derived so older code keeps working.
+  const VALID_ROLES = ['public', 'student', 'teacher', 'staff', 'admin'];
+  const rawRoles = Array.isArray(metadata.visible_to)
+    ? metadata.visible_to
+    : metadata.visible_to
+      ? [metadata.visible_to]
+      : [];
+  let visibleTo = rawRoles.filter((role) => VALID_ROLES.includes(role));
+  if (!visibleTo.length) visibleTo = metadata.visibility ? [metadata.visibility] : ['student'];
+  const visibility = VALID_ROLES.find((role) => visibleTo.includes(role)) || 'student';
+
+  const payload = {
+    title: metadata.title || file.originalname,
+    file_url: publicUrl.publicUrl,
+    file_type: file.mimetype || extension,
+    category: metadata.category,
+    department: metadata.department,
+    semester: metadata.semester ? Number(metadata.semester) : null,
+    visibility,
+    visible_to: visibleTo,
+    academic_year: metadata.academic_year,
+    tags: metadata.tags ? metadata.tags.split(',').map((tag) => tag.trim()).filter(Boolean) : [],
+    status: 'processing',
+    uploaded_by: profile.id
+  };
+
+  let { data: document, error: documentError } = await supabase.from('documents').insert(payload).select().single();
+  // Fallback if `visible_to` isn't migrated yet (undefined_column).
+  if (documentError?.code === '42703') {
+    delete payload.visible_to;
+    ({ data: document, error: documentError } = await supabase.from('documents').insert(payload).select().single());
+  }
   if (documentError) throw documentError;
 
   setImmediate(() => {

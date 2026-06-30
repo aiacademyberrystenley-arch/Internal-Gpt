@@ -1,13 +1,22 @@
 import { useEffect, useState } from 'react';
 import { Download, Pencil, RefreshCcw, Trash2, Upload } from 'lucide-react';
 import { api } from '../lib/api';
+import { DOCUMENT_DEPARTMENTS } from '../lib/departments';
+
+// Who a document is shared with (multi-select). Admins always see everything.
+const AUDIENCES = [
+  { value: 'public', label: 'Everyone' },
+  { value: 'student', label: 'Student' },
+  { value: 'teacher', label: 'Teacher' },
+  { value: 'staff', label: 'Staff' }
+];
 
 const initialForm = {
   title: '',
   category: 'Notice',
-  department: 'Computer Science and Engineering',
+  department: 'Computer Science & Engineering',
   semester: '',
-  visibility: 'student',
+  visible_to: ['student'],
   academic_year: '2025-2026',
   tags: ''
 };
@@ -38,12 +47,20 @@ export default function Documents({ profile }) {
   async function uploadDocument(event) {
     event.preventDefault();
     if (!file) return;
+    if (!form.visible_to.length) {
+      setMessage('Select at least one audience (who can see this document).');
+      return;
+    }
     setBusy(true);
     setMessage('');
     try {
       const body = new FormData();
       body.append('file', file);
-      Object.entries(form).forEach(([key, value]) => body.append(key, value));
+      Object.entries(form).forEach(([key, value]) => {
+        if (key === 'visible_to') return; // appended as repeated fields below
+        body.append(key, value);
+      });
+      form.visible_to.forEach((role) => body.append('visible_to', role));
       await api('/api/documents/upload', { method: 'POST', body });
       setForm(initialForm);
       setFile(null);
@@ -94,16 +111,43 @@ export default function Documents({ profile }) {
           <div className="mt-4 grid gap-3 md:grid-cols-3">
             <input className="input" placeholder="Title" value={form.title} onChange={(e) => setForm({ ...form, title: e.target.value })} />
             <input className="input" placeholder="Category" value={form.category} onChange={(e) => setForm({ ...form, category: e.target.value })} />
-            <input className="input" placeholder="Department" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} />
-            <input className="input" placeholder="Semester" type="number" value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} />
-            <select className="input" value={form.visibility} onChange={(e) => setForm({ ...form, visibility: e.target.value })}>
-              {['public', 'student', 'teacher', 'staff', 'admin'].map((item) => (
+            <select className="input" value={form.department} onChange={(e) => setForm({ ...form, department: e.target.value })} title="Department">
+              {DOCUMENT_DEPARTMENTS.map((item) => (
                 <option key={item} className="bg-slate-900">{item}</option>
               ))}
             </select>
+            <input className="input" placeholder="Semester" type="number" value={form.semester} onChange={(e) => setForm({ ...form, semester: e.target.value })} />
             <input className="input" placeholder="Academic year" value={form.academic_year} onChange={(e) => setForm({ ...form, academic_year: e.target.value })} />
-            <input className="input md:col-span-2" placeholder="Tags (comma separated)" value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} />
-            <input className="input file:mr-3 file:rounded file:border-0 file:bg-slate-800 file:px-3 file:py-1 file:text-slate-200" type="file" accept=".pdf,.docx,.txt,.csv" onChange={(e) => setFile(e.target.files?.[0])} />
+            <input className="input" placeholder="Tags (comma separated)" value={form.tags} onChange={(e) => setForm({ ...form, tags: e.target.value })} />
+
+            <div className="md:col-span-3">
+              <p className="label mb-2">Visible to <span className="font-normal normal-case text-slate-500">— select one or more roles</span></p>
+              <div className="flex flex-wrap gap-2">
+                {AUDIENCES.map(({ value, label }) => {
+                  const active = form.visible_to.includes(value);
+                  return (
+                    <button
+                      type="button"
+                      key={value}
+                      onClick={() =>
+                        setForm((f) => ({
+                          ...f,
+                          visible_to: active ? f.visible_to.filter((v) => v !== value) : [...f.visible_to, value]
+                        }))
+                      }
+                      className={`focus-ring rounded-lg border px-4 py-2 text-sm font-medium transition-colors ${
+                        active ? 'border-blue-500 bg-blue-600/15 text-white' : 'border-slate-700 text-slate-300 hover:bg-slate-800'
+                      }`}
+                    >
+                      {label}
+                    </button>
+                  );
+                })}
+              </div>
+              <p className="mt-1.5 text-xs text-slate-500">Admins always see every document regardless of this setting.</p>
+            </div>
+
+            <input className="input file:mr-3 file:rounded file:border-0 file:bg-slate-800 file:px-3 file:py-1 file:text-slate-200 md:col-span-3" type="file" accept=".pdf,.docx,.txt,.csv" onChange={(e) => setFile(e.target.files?.[0])} />
           </div>
           {file && <p className="mt-3 text-sm text-slate-400">Selected file: <span className="font-medium text-slate-200">{file.name}</span></p>}
           <button disabled={busy || !file} className="btn-primary mt-4">
@@ -115,15 +159,17 @@ export default function Documents({ profile }) {
       {!canUpload && <p className="card mt-6 p-4 text-sm text-slate-300">Student accounts can view available documents but cannot upload or manage files.</p>}
       {message && <p className="mt-4 rounded-lg border border-slate-800 bg-slate-900 p-3 text-sm text-slate-300">{message}</p>}
 
-      <div className="card mt-6 overflow-hidden">
-        <div className="grid grid-cols-[1.4fr_1fr_120px_150px] gap-3 border-b border-slate-800 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
-          <span>Title</span><span>Metadata</span><span>Status</span><span>Actions</span>
+      <div className="card mt-6 overflow-x-auto">
+        <div className="min-w-[760px]">
+        <div className="grid grid-cols-[1.4fr_1fr_1fr_110px_150px] gap-3 border-b border-slate-800 px-4 py-3 text-xs font-semibold uppercase tracking-wide text-slate-400">
+          <span>Title</span><span>Department</span><span>Visible to</span><span>Status</span><span>Actions</span>
         </div>
         {documents.length === 0 && <p className="px-4 py-6 text-sm text-slate-500">No documents yet.</p>}
         {documents.map((doc) => (
-          <div key={doc.id} className="grid grid-cols-[1.4fr_1fr_120px_150px] items-center gap-3 border-b border-slate-800 px-4 py-3 text-sm last:border-0">
+          <div key={doc.id} className="grid grid-cols-[1.4fr_1fr_1fr_110px_150px] items-center gap-3 border-b border-slate-800 px-4 py-3 text-sm last:border-0">
             <span className="font-medium text-white">{doc.title}</span>
-            <span className="text-slate-400">{doc.category} · {doc.department || 'All'} · {doc.visibility}</span>
+            <span className="text-slate-300">{doc.department || 'All / General'}</span>
+            <span className="capitalize text-slate-400">{(doc.visible_to?.length ? doc.visible_to : [doc.visibility]).map((v) => (v === 'public' ? 'Everyone' : v)).join(', ')}</span>
             <span className={`w-fit rounded-md border px-2 py-1 text-center text-xs font-semibold ${statusStyles[doc.status] || 'border-slate-700 bg-slate-800 text-slate-300'}`}>{doc.status}</span>
             <span className="flex items-center gap-1">
               {doc.file_url && (
@@ -144,6 +190,7 @@ export default function Documents({ profile }) {
             </span>
           </div>
         ))}
+        </div>
       </div>
     </div>
   );

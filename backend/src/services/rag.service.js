@@ -4,6 +4,47 @@ import { generateRichAnswer, isAnthropicConfigured } from './claude.service.js';
 
 const NO_INFO = 'I do not have enough information in the uploaded college data.';
 
+// Shown to a student when the only matching information belongs to a different
+// department (department-specific document the student isn't part of).
+const DEPT_REDIRECT =
+  'Dear user, I do have this information — but it is department-specific, so kindly contact the concerned HOD / Dean.\n\nThank you for your understanding.\n\nPlease keep asking your queries; we are pleased to answer you in a more customised manner.';
+
+// Documents tagged to one of these are open to everyone (not department-specific).
+const GENERAL_DEPTS = new Set(['', 'all', 'allgeneral', 'general']);
+
+// Common abbreviation → full (normalized) department, so a student whose profile
+// says "CSE" still matches a "Computer Science & Engineering" document.
+const DEPT_ALIASES = {
+  cse: 'computerscienceandengineering',
+  cs: 'computerscienceandengineering',
+  it: 'informationtechnology',
+  ece: 'electronicsandcommunicationengineering',
+  eee: 'electricalandelectronicsengineering',
+  mech: 'mechanicalengineering',
+  civil: 'civilengineering',
+  sh: 'scienceandhumanities',
+  bba: 'management',
+  mba: 'management'
+};
+
+function normalizeDept(value) {
+  return (value || '').toLowerCase().replace(/&/g, 'and').replace(/[^a-z0-9]/g, '');
+}
+
+function isDeptSpecific(dept) {
+  return !GENERAL_DEPTS.has(normalizeDept(dept));
+}
+
+// Does a document's department apply to this user? General docs always do.
+function deptMatches(docDept, userDept) {
+  const d = normalizeDept(docDept);
+  if (GENERAL_DEPTS.has(d)) return true;
+  let u = normalizeDept(userDept);
+  if (!u) return false;
+  u = DEPT_ALIASES[u] || u;
+  return d === u || d.includes(u) || u.includes(d);
+}
+
 // Common English + question words that carry no retrieval signal.
 const STOPWORDS = new Set([
   'the', 'and', 'for', 'are', 'but', 'not', 'you', 'all', 'any', 'can', 'had',
@@ -66,27 +107,40 @@ function scoreChunk(questionTerms, content, idf) {
   return possible > 0 ? matched / possible : 0;
 }
 
-function allowedVisibility(role) {
-  if (role === 'admin') return ['public', 'student', 'teacher', 'staff', 'admin'];
+// Legacy hierarchical visibility — used only as a fallback if the `visible_to`
+// column hasn't been migrated yet (so deploy order can't break retrieval).
+function legacyVisibility(role) {
   if (role === 'teacher' || role === 'staff') return ['public', 'student', 'teacher', 'staff'];
   return ['public', 'student'];
 }
 
 export async function retrieveChunks({ question, profile, filters = {}, limit = 6 }) {
   const supabase = requireSupabase();
-  const visibility = allowedVisibility(profile.role);
+  const isAdmin = profile.role === 'admin';
 
-  let query = supabase
-    .from('document_chunks')
-    .select('id, chunk_index, content, metadata, documents!inner(id, title, category, department, semester, visibility, status)')
-    .eq('documents.status', 'indexed')
-    .in('documents.visibility', visibility);
+  const baseQuery = () => {
+    let q = supabase
+      .from('document_chunks')
+      .select('id, chunk_index, content, metadata, documents!inner(id, title, category, department, semester, status)')
+      .eq('documents.status', 'indexed');
+    if (filters.department) q = q.eq('documents.department', filters.department);
+    if (filters.semester) q = q.eq('documents.semester', Number(filters.semester));
+    if (filters.category) q = q.eq('documents.category', filters.category);
+    return q;
+  };
 
-  if (filters.department) query = query.eq('documents.department', filters.department);
-  if (filters.semester) query = query.eq('documents.semester', Number(filters.semester));
-  if (filters.category) query = query.eq('documents.category', filters.category);
+  // Admins retrieve from all documents; everyone else only from documents whose
+  // audience includes their role (or "public").
+  let query = baseQuery();
+  if (!isAdmin) query = query.overlaps('documents.visible_to', ['public', profile.role]);
+  let { data, error } = await query.limit(250);
 
-  const { data, error } = await query.limit(250);
+  // Fallback if `visible_to` isn't migrated yet (undefined_column).
+  if (error?.code === '42703') {
+    let fallback = baseQuery();
+    if (!isAdmin) fallback = fallback.in('documents.visibility', legacyVisibility(profile.role));
+    ({ data, error } = await fallback.limit(250));
+  }
   if (error) throw error;
 
   const rows = data || [];
@@ -101,6 +155,7 @@ export async function retrieveChunks({ question, profile, filters = {}, limit = 
       score: scoreChunk(questionTerms, row.content, idf),
       title: row.documents.title,
       document_id: row.documents.id,
+      department: row.documents.department,
       metadata: row.metadata
     }))
     .filter((row) => row.score > 0)
@@ -114,26 +169,44 @@ export async function answerQuestion({ question, profile, sessionId, attachmentT
   const strongChunks = chunks.filter((chunk) => chunk.score >= 0.12);
   const hasAttachment = Boolean(attachmentText && attachmentText.trim());
 
+  // Department gating — students may only be answered from documents for their
+  // own department or from general / all-department documents. Teachers, staff
+  // and admins are not gated.
+  const userDept = profile.department || profile.branch || '';
+  const allowedChunks = profile.role === 'student'
+    ? strongChunks.filter((chunk) => deptMatches(chunk.department, userDept))
+    : strongChunks;
+  // There IS a strong match, but it's department-specific to another department
+  // and the student has nothing they're allowed to use — redirect politely.
+  const blockedByDept =
+    profile.role === 'student' &&
+    !hasAttachment &&
+    allowedChunks.length === 0 &&
+    strongChunks.some((chunk) => isDeptSpecific(chunk.department));
+
   let answer;
-  if (isAnthropicConfigured) {
+  if (blockedByDept) {
+    answer = DEPT_REDIRECT;
+  } else if (isAnthropicConfigured) {
     // Claude handles every signed-in request — plain answers, tables, notes,
     // charts, diagrams, mind maps — grounded in the retrieved campus documents.
     try {
-      answer = await generateRichAnswer({ question, chunks: strongChunks, attachmentText });
+      answer = await generateRichAnswer({ question, chunks: allowedChunks, attachmentText });
     } catch (error) {
       console.warn(`Claude unavailable (${error.status || error.message}); falling back to default model.`);
-      answer = strongChunks.length || hasAttachment
-        ? await generateAnswer({ question, chunks: strongChunks, attachmentText })
+      answer = allowedChunks.length || hasAttachment
+        ? await generateAnswer({ question, chunks: allowedChunks, attachmentText })
         : NO_INFO;
     }
-  } else if (strongChunks.length || hasAttachment) {
+  } else if (allowedChunks.length || hasAttachment) {
     // Fallback when Claude isn't configured: answer from matching docs or the attachment.
-    answer = await generateAnswer({ question, chunks: strongChunks, attachmentText });
+    answer = await generateAnswer({ question, chunks: allowedChunks, attachmentText });
   } else {
     answer = NO_INFO;
   }
 
-  const sources = strongChunks.map((chunk, index) => ({
+  // Never cite the blocked department-specific documents in the redirect case.
+  const sources = (blockedByDept ? [] : allowedChunks).map((chunk, index) => ({
     label: `Source ${index + 1}`,
     document_id: chunk.document_id,
     title: chunk.title,

@@ -25,17 +25,23 @@ router.post('/upload', requireAuth, requireRole(['admin', 'teacher']), upload.si
 router.get('/', requireAuth, async (req, res, next) => {
   try {
     const supabase = requireSupabase();
-    const visibility = req.profile.role === 'admin'
-      ? ['public', 'student', 'teacher', 'staff', 'admin']
-      : ['teacher', 'staff'].includes(req.profile.role)
+    const isAdmin = req.profile.role === 'admin';
+
+    // Admins see everything; everyone else sees documents whose audience
+    // includes their role (or "public" / everyone).
+    let query = supabase.from('documents').select('*').order('created_at', { ascending: false });
+    if (!isAdmin) query = query.overlaps('visible_to', ['public', req.profile.role]);
+    let { data, error } = await query;
+
+    // Fallback if `visible_to` isn't migrated yet (undefined_column).
+    if (error?.code === '42703') {
+      const legacy = ['teacher', 'staff'].includes(req.profile.role)
         ? ['public', 'student', 'teacher', 'staff']
         : ['public', 'student'];
-
-    const { data, error } = await supabase
-      .from('documents')
-      .select('*')
-      .in('visibility', visibility)
-      .order('created_at', { ascending: false });
+      let fallback = supabase.from('documents').select('*').order('created_at', { ascending: false });
+      if (!isAdmin) fallback = fallback.in('visibility', legacy);
+      ({ data, error } = await fallback);
+    }
     if (error) throw error;
     res.json(data);
   } catch (error) {

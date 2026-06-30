@@ -1,0 +1,185 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>SRM-GPT — Document Management Guide</title>
+<style>
+  :root { --blue:#2563eb; --blue-dark:#1e3a8a; --ink:#0f172a; --muted:#475569; --line:#e2e8f0; --bg-soft:#f8fafc; }
+  * { box-sizing: border-box; }
+  html, body { margin:0; padding:0; }
+  body {
+    font-family: -apple-system, "Segoe UI", Roboto, Inter, Arial, sans-serif;
+    color: var(--ink); line-height: 1.5; font-size: 13px;
+    background:#fff;
+  }
+  .page { max-width: 820px; margin: 0 auto; padding: 28px 34px; }
+
+  header.brand {
+    display:flex; align-items:center; gap:14px;
+    border-bottom: 3px solid var(--blue); padding-bottom: 14px; margin-bottom: 18px;
+  }
+  .logo {
+    width:46px; height:46px; border-radius:50%;
+    background: var(--blue); color:#fff; font-weight:800; font-size:18px;
+    display:flex; align-items:center; justify-content:center; flex:0 0 auto;
+  }
+  .brand h1 { margin:0; font-size:20px; letter-spacing:.2px; }
+  .brand .sub { margin:2px 0 0; color:var(--muted); font-size:11px; text-transform:uppercase; letter-spacing:1px; font-weight:600; }
+
+  h2 {
+    font-size: 14px; margin: 22px 0 8px; color:var(--blue-dark);
+    border-left: 4px solid var(--blue); padding-left: 9px;
+  }
+  h2 .n { color:var(--blue); font-weight:800; }
+  p { margin: 6px 0; }
+  .muted { color: var(--muted); }
+  .lead { color: var(--muted); margin-top:0; font-size:13px; }
+
+  table { width:100%; border-collapse: collapse; margin: 8px 0 10px; font-size:12px; }
+  th, td { border:1px solid var(--line); padding:6px 9px; text-align:left; vertical-align:top; }
+  thead th { background: var(--blue); color:#fff; font-weight:600; }
+  tbody tr:nth-child(even) { background: var(--bg-soft); }
+  .center { text-align:center; }
+  .yes { color:#16a34a; font-weight:700; }
+  .no  { color:#dc2626; font-weight:700; }
+
+  ol.steps { margin: 6px 0; padding-left: 20px; }
+  ol.steps li { margin: 5px 0; }
+  ol.steps li b { color: var(--ink); }
+
+  .pills { display:flex; flex-wrap:wrap; gap:6px; margin:4px 0; }
+  .pill { border:1px solid var(--line); border-radius:999px; padding:2px 10px; font-size:11px; background:var(--bg-soft); }
+
+  .status { display:inline-block; border-radius:6px; padding:1px 8px; font-size:11px; font-weight:700; border:1px solid; }
+  .s-proc { color:#b45309; border-color:#fde68a; background:#fffbeb; }
+  .s-ok   { color:#15803d; border-color:#bbf7d0; background:#f0fdf4; }
+  .s-fail { color:#b91c1c; border-color:#fecaca; background:#fef2f2; }
+
+  .callout {
+    border:1px solid var(--line); border-left:4px solid var(--blue);
+    background: var(--bg-soft); padding:10px 12px; border-radius:6px; margin:10px 0;
+  }
+  .callout.warn { border-left-color:#f59e0b; }
+  .callout.quote { font-style: italic; color:var(--muted); }
+
+  .summary {
+    margin-top:18px; border:1px dashed var(--blue); border-radius:8px;
+    background:#eff6ff; padding:12px 14px;
+  }
+  .summary b { color:var(--blue-dark); }
+
+  footer { margin-top:22px; border-top:1px solid var(--line); padding-top:8px; color:var(--muted); font-size:10.5px; display:flex; justify-content:space-between; }
+
+  @page { size: A4; margin: 14mm; }
+  @media print {
+    .page { padding:0; max-width:none; }
+    h2 { break-after: avoid; }
+    table, .callout, .summary { break-inside: avoid; }
+    .noprint { display:none; }
+    body { font-size:12px; }
+  }
+  .noprint-bar {
+    background:#0f172a; color:#fff; text-align:center; padding:8px; font-size:12px;
+  }
+  .noprint-bar a { color:#93c5fd; }
+</style>
+</head>
+<body>
+<div class="noprint noprint-bar">
+  To save as PDF: press <b>Ctrl/Cmd&nbsp;+&nbsp;P</b> → Destination <b>“Save as PDF”</b> → Save. (This bar won’t appear in the PDF.)
+</div>
+
+<div class="page">
+
+  <header class="brand">
+    <div class="logo">S</div>
+    <div>
+      <h1>SRM-GPT — Document Management Guide</h1>
+      <p class="sub">SRM Institute of Science &amp; Technology · Staff Training Handout</p>
+    </div>
+  </header>
+
+  <p class="lead">How to upload documents and how the system decides who can see them. Share this with anyone who manages content.</p>
+
+  <h2><span class="n">1.</span>&nbsp; Who can do what</h2>
+  <table>
+    <thead>
+      <tr><th>Action</th><th class="center">Admin</th><th class="center">Teacher</th><th class="center">Staff</th><th class="center">Student</th></tr>
+    </thead>
+    <tbody>
+      <tr><td><b>Upload</b> documents</td><td class="center yes">Yes</td><td class="center yes">Yes</td><td class="center no">No</td><td class="center no">No</td></tr>
+      <tr><td><b>Rename / Delete</b> documents</td><td class="center yes">Yes</td><td class="center no">No</td><td class="center no">No</td><td class="center no">No</td></tr>
+      <tr><td><b>View / download</b></td><td class="center yes">All</td><td class="center yes">Yes</td><td class="center yes">Yes</td><td class="center">Only what's shared</td></tr>
+    </tbody>
+  </table>
+  <p class="muted">In short: <b>Admins &amp; Teachers upload. Only Admins rename or delete.</b> Everyone else only views what they're allowed to see.</p>
+
+  <h2><span class="n">2.</span>&nbsp; How to upload a document</h2>
+  <p>Open the <b>Documents</b> page (left menu) and fill the <b>Upload document</b> form:</p>
+  <ol class="steps">
+    <li><b>Title</b> — a clear, recognisable name. <span class="muted">e.g. “CSE Sem 6 Time Table”.</span></li>
+    <li><b>Category</b> — a label such as Notice, Time Table, Syllabus, Circular.</li>
+    <li><b>Department</b> — choose from the dropdown:
+        <span class="pill">All / General = everyone</span> or a specific one
+        <span class="pill">Computer Science &amp; Engineering</span><span class="pill">Science &amp; Humanities</span><span class="pill">Management</span> …</li>
+    <li><b>Semester</b> — the semester number, if relevant (optional).</li>
+    <li><b>Academic year</b> — e.g. 2025-2026.</li>
+    <li><b>Tags</b> — comma-separated keywords to aid search. <span class="muted">e.g. exam, timetable, sem6.</span></li>
+    <li><b>Visible to</b> — tap to pick <b>one or more</b> roles:
+        <div class="pills"><span class="pill">Everyone</span><span class="pill">Student</span><span class="pill">Teacher</span><span class="pill">Staff</span></div>
+        <span class="muted">You can combine them (e.g. Student + Teacher). Admins always see every document.</span></li>
+    <li><b>Choose the file</b> — supported: <b>PDF, Word (.docx), Text (.txt), CSV</b>, up to <b>20 MB</b>.</li>
+    <li>Click <b>Upload and index</b>.</li>
+  </ol>
+
+  <h2><span class="n">3.</span>&nbsp; What happens after you upload</h2>
+  <p>The system automatically saves the file, reads the text inside it, and makes it searchable. Watch the <b>Status</b> column (click <b>Refresh</b> after a few seconds):</p>
+  <table>
+    <thead><tr><th>Status</th><th>Meaning</th><th>What to do</th></tr></thead>
+    <tbody>
+      <tr><td><span class="status s-proc">Processing</span></td><td>Still being read.</td><td>Wait a few seconds, then Refresh.</td></tr>
+      <tr><td><span class="status s-ok">Indexed</span></td><td>Done — now usable in chat answers.</td><td>Nothing. It's live.</td></tr>
+      <tr><td><span class="status s-fail">Failed</span></td><td>Couldn't read the text (e.g. a scanned-image PDF).</td><td>Re-upload a clearer / text-based file.</td></tr>
+    </tbody>
+  </table>
+  <div class="callout warn"><b>Important:</b> a document only powers chat answers once its status is <b>Indexed</b>.</div>
+
+  <h2><span class="n">4.</span>&nbsp; Who can see a document — the two rules</h2>
+  <p>A person can use a document only if <b>both</b> rules pass:</p>
+  <p><b>Rule A — Audience</b> (the “Visible to” you picked): the viewer's role must be in the list, or the audience is <b>Everyone</b>. <span class="muted">(Admins bypass this and see all.)</span></p>
+  <p><b>Rule B — Department</b> (students only):</p>
+  <ol class="steps">
+    <li>Department = <b>All / General</b> → every student can use it.</li>
+    <li>Department = a <b>specific</b> one (e.g. CSE) → only <b>students of that department</b>.</li>
+    <li>A student from a different department gets a polite redirect instead of the answer:</li>
+  </ol>
+  <div class="callout quote">“Dear user, I do have this information — but it is department-specific, so kindly contact the concerned HOD / Dean. Thank you for your understanding. Please keep asking your queries; we are pleased to answer you in a more customised manner.”</div>
+  <p class="muted">Teachers, staff and admins are <b>not</b> department-restricted — they see across departments. This is why the same department dropdown is used at <b>signup</b> and at <b>upload</b>, so they match.</p>
+
+  <table>
+    <thead><tr><th>Document</th><th>Visible to</th><th>Department</th><th>Who can use it in chat</th></tr></thead>
+    <tbody>
+      <tr><td>Hostel rules</td><td>Everyone</td><td>All / General</td><td>Everyone</td></tr>
+      <tr><td>CSE time table</td><td>Student</td><td>Computer Science &amp; Engineering</td><td>Only <b>CSE students</b> (others get the HOD/Dean message)</td></tr>
+      <tr><td>Faculty leave policy</td><td>Teacher, Staff</td><td>All / General</td><td>Teachers &amp; staff (not students)</td></tr>
+      <tr><td>Exam circular</td><td>Student, Teacher</td><td>All / General</td><td>Students &amp; teachers, any department</td></tr>
+    </tbody>
+  </table>
+
+  <h2><span class="n">5.</span>&nbsp; The document list &amp; the chat connection</h2>
+  <p>On the Documents page each row shows <b>Title · Department · Visible to · Status · Actions</b> (download / rename / delete). The list itself is filtered — a teacher never even sees admin-only documents.</p>
+  <p>When anyone asks a question in the <b>chat</b>, the assistant searches <b>only the documents that person is allowed to see</b> (Rules A + B) and answers from them. So tagging correctly is what makes the chatbot give the right answers to the right people.</p>
+
+  <div class="summary">
+    <b>One-line summary:</b> Admins/teachers upload a file, tag <b>who can see it</b> (Visible to) and <b>which department</b> it's for. The system indexes it. The chatbot then answers each person only from the documents they're allowed to see — and students only get their own department's documents.
+  </div>
+
+  <footer>
+    <span>SRM-GPT · Document Management Guide</span>
+    <span>gpt.srmup.in</span>
+  </footer>
+
+</div>
+</body>
+</html>
